@@ -1,76 +1,107 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Quiz Android App</title>
+<title>News Aggregator Android App</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
+<style>
+body{
+background:#0b0b0b;
+}
+
+/* red glow hover */
+
+.img:hover{
+transform:scale(1.05);
+box-shadow:0 0 25px rgba(255,0,0,0.5);
+}
+</style>
+
 </head>
 
-<body class="bg-gray-900 text-white px-6 py-10">
+<body class="text-white">
 
-<div class="max-w-4xl mx-auto">
+<div class="max-w-6xl mx-auto px-6 py-16">
 
-<h1 class="text-4xl font-bold mb-6">
-Quiz Android App
+<h1 class="text-4xl font-bold mb-6 text-red-500">
+News Aggregator Android App
 </h1>
 
-<p class="text-gray-300 mb-8">
-This Android quiz application allows users to answer multiple choice
-questions and track their score. The app includes an easy-to-use
-interface and offline functionality.
+<p class="text-gray-300 mb-12 text-lg">
+
+This Android application allows users to read the latest news from
+multiple TV channels and online news portals in one place.
+
+Users can easily browse different categories and stay updated with
+current events through a simple and user-friendly interface.
+
+The app is designed to provide quick access to news without needing
+to visit multiple websites. It focuses on clean UI, smooth navigation
+and fast content loading.
+
 </p>
 
 
-<h2 class="text-2xl font-bold mb-4">
-Screenshots
+<h2 class="text-2xl font-bold mb-6 text-red-400">
+App Screenshots
 </h2>
 
-<div class="grid md:grid-cols-2 gap-6 mb-10">
 
-<img src="screenshot1.png" class="rounded">
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-14">
 
-<img src="screenshot2.png" class="rounded">
+<img class="rounded-lg img transition duration-300"
+src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/ss1.jpeg">
+
+<img class="rounded-lg img transition duration-300"
+src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/ss2.jpeg">
+
+<img class="rounded-lg img transition duration-300"
+src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/ss3.jpeg">
+
+<img class="rounded-lg img transition duration-300"
+src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/ss4.jpeg">
 
 </div>
 
 
-<h2 class="text-2xl font-bold mb-4">
+<h2 class="text-2xl font-bold mb-6 text-red-400">
 Technology Stack
 </h2>
 
-<ul class="list-disc ml-6 mb-8 text-gray-300">
+<ul class="list-disc ml-6 text-gray-300 mb-12 space-y-2">
+
 <li>Java</li>
 <li>Android Studio</li>
 <li>SQLite</li>
 <li>AdMob Ads</li>
+
 </ul>
 
 
-<div class="space-x-3">
+<div class="flex flex-wrap gap-4">
 
-<a href="#"
-class="bg-indigo-600 hover:bg-indigo-700 px-5 py-2 rounded">
-Download APK
+<a
+href="https://play.google.com/store/apps/details?id=com.artechandsoftltd.newsbangla"
+target="_blank"
+class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-semibold">
+
+View on Play Store
+
 </a>
 
-<a href="#"
-class="bg-gray-700 hover:bg-gray-600 px-5 py-2 rounded">
-GitHub Source
-</a>
 
-<a href="#"
-class="bg-gray-700 hover:bg-gray-600 px-5 py-2 rounded">
-Play Store
-</a>
+<a
+href="index.html"
+class="bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg">
 
-<a href="index.html"
-class="bg-gray-700 hover:bg-gray-600 px-5 py-2 rounded">
 Back to Portfolio
+
 </a>
 
 </div>
@@ -79,3 +110,4 @@ Back to Portfolio
 
 </body>
 </html>
+```
