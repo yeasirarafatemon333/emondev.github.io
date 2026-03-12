@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Yeasir Arafat Emon | Developer Portfolio</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+html{
+scroll-behavior:smooth;
+}
+</style>
+
+</head>
+
+<body class="bg-gray-900 text-white font-sans">
+
+<!-- HERO -->
+<section class="min-h-screen flex items-center justify-center text-center px-6">
+
+<div>
+
+<img src="profile.jpg" class="w-36 h-36 mx-auto rounded-full mb-6 border-4 border-indigo-500">
+
+<h1 class="text-4xl md:text-5xl font-bold mb-4">
+Yeasir Arafat Emon
+</h1>
+
+<h2 class="text-xl text-indigo-400 mb-6">
+<span id="typing"></span>
+</h2>
+
+<div class="space-x-3">
+
+<a href="#projects" class="bg-indigo-600 hover:bg-indigo-700 px-5 py-2 rounded">
+View Projects
+</a>
+
+<a href="#contact" class="bg-gray-700 hover:bg-gray-600 px-5 py-2 rounded">
+Contact Me
+</a>
+
+<a href="https://github.com/yourusername" target="_blank"
+class="bg-gray-700 hover:bg-gray-600 px-5 py-2 rounded">
+My GitHub
+</a>
+
+<a href="cv.pdf"
+class="bg-indigo-600 hover:bg-indigo-700 px-5 py-2 rounded">
+Download CV
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ABOUT -->
+<section class="py-20 px-6 max-w-4xl mx-auto">
+
+<h2 class="text-3xl font-bold mb-6 text-center">
+About Me
+</h2>
+
+<p class="text-gray-300 text-lg text-center">
+Hello! I'm Yeasir Arafat Emon, an aspiring Android developer passionate
+about building useful mobile applications. I enjoy solving real-world
+problems through technology and continuously learning new programming
+skills.
+</p>
+
+</section>
+
+
+<!-- SKILLS -->
+<section class="py-20 bg-gray-800 px-6">
+
+<h2 class="text-3xl font-bold text-center mb-12">
+Skills
+</h2>
+
+<div class="max-w-3xl mx-auto space-y-6">
+
+<div>
+<p>Java</p>
+<div class="w-full bg-gray-700 h-3 rounded">
+<div class="bg-indigo-500 h-3 rounded w-4/5"></div>
+</div>
+</div>
+
+<div>
+<p>Android Development</p>
+<div class="w-full bg-gray-700 h-3 rounded">
+<div class="bg-indigo-500 h-3 rounded w-3/4"></div>
+</div>
+</div>
+
+<div>
+<p>SQLite</p>
+<div class="w-full bg-gray-700 h-3 rounded">
+<div class="bg-indigo-500 h-3 rounded w-3/4"></div>
+</div>
+</div>
+
+<div>
+<p>UI/UX</p>
+<div class="w-full bg-gray-700 h-3 rounded">
+<div class="bg-indigo-500 h-3 rounded w-2/3"></div>
+</div>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PROJECTS -->
+<section id="projects" class="py-20 px-6">
+
+<h2 class="text-3xl font-bold text-center mb-12">
+Projects
+</h2>
+
+<div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+<!-- PROJECT CARD -->
+
+<div class="bg-gray-800 rounded-lg overflow-hidden shadow hover:scale-105 transition">
+
+<img src="project1.jpg">
+
+<div class="p-4">
+
+<h3 class="text-xl font-bold mb-2">
+Quiz Android App
+</h3>
+
+<p class="text-gray-400 mb-4">
+A quiz app with multiple choice questions and score tracking.
+</p>
+
+<a href="project1.html"
+class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded">
+View Project
+</a>
+
+</div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- CONTACT -->
+<section id="contact" class="py-20 bg-gray-800 px-6 text-center">
+
+<h2 class="text-3xl font-bold mb-6">
+Contact Me
+</h2>
+
+<p class="text-gray-300 mb-4">
+Email: youremail@gmail.com
+</p>
+
+<p class="text-gray-300 mb-4">
+GitHub: github.com/yourusername
+</p>
+
+<p class="text-gray-300 mb-6">
+LinkedIn: linkedin.com/in/yourusername
+</p>
+
+<a href="mailto:youremail@gmail.com"
+class="bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded">
+Send Email
+</a>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer class="text-center py-6 bg-gray-900 border-t border-gray-700">
+
+<p class="text-gray-400">
+© 2026 Yeasir Arafat Emon
+</p>
+
+</footer>
+
+
+<script>
+
+const words = [
+"Aspiring Android Developer",
+"Software Developer",
+"Tech Enthusiast"
+]
+
+let i = 0
+let j = 0
+let currentWord = ""
+let isDeleting = false
+
+function type(){
+
+currentWord = words[i]
+
+if(isDeleting){
+j--
+}else{
+j++
+}
+
+document.getElementById("typing").textContent = currentWord.substring(0,j)
+
+if(!isDeleting && j === currentWord.length){
+isDeleting = true
+setTimeout(type,1000)
+return
+}
+
+if(isDeleting && j === 0){
+isDeleting = false
+i++
+if(i === words.length){
+i = 0
+}
+}
+
+setTimeout(type,100)
+
+}
+
+type()
+
+</script>
+
+</body>
+</html>
