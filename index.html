@@ -2,96 +2,42 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Yeasir Arafat Emon | Android Developer</title>
+<title>Yeasir Arafat Emon | Android & Tech Enthusiast</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
 <style>
+html { scroll-behavior: smooth; }
+body { font-family: system-ui; color: white; background: radial-gradient(circle at 20% 20%, #1e3a8a33, transparent 40%), radial-gradient(circle at 80% 0%, #9333ea33, transparent 40%), radial-gradient(circle at 50% 80%, #06b6d433, transparent 40%), #050505; overflow-x: hidden; }
 
-html{
-scroll-behavior:smooth;
-}
+#particles { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; }
 
-body{
-font-family:system-ui;
-color:white;
+.hero-bg { background: linear-gradient(135deg,#020617,#111827,#020617); position: relative; }
 
-background:
-radial-gradient(circle at 20% 20%, #1e3a8a33, transparent 40%),
-radial-gradient(circle at 80% 0%, #9333ea33, transparent 40%),
-radial-gradient(circle at 50% 80%, #06b6d433, transparent 40%),
-#050505;
+.btn-main { background: linear-gradient(135deg,#6366f1,#06b6d4); font-weight: 600; border-radius: 10px; transition: .35s; }
+.btn-main:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 15px 50px rgba(99,102,241,.6); }
 
-overflow-x:hidden;
-}
+.glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 15px 60px rgba(0,0,0,0.5); transition: .35s; }
+.glass:hover { transform: translateY(-8px); box-shadow: 0 25px 70px rgba(99,102,241,.35); }
 
-#particles{
-position:fixed;
-width:100%;
-height:100%;
-top:0;
-left:0;
-z-index:-1;
-}
+.project:hover { transform: translateY(-10px) scale(1.03); box-shadow: 0 25px 80px rgba(99,102,241,.5); }
 
-.hero-bg{
-background:linear-gradient(135deg,#020617,#111827,#020617);
-position:relative;
-}
+.progress-bg { background: #111827; border-radius: 20px; height: 12px; overflow: hidden; }
+.progress-fill { height: 12px; border-radius: 20px; background: linear-gradient(90deg,#6366f1,#06b6d4); animation: skill 2s ease forwards; }
+@keyframes skill { from { width: 0 } }
 
-.btn-main{
-background:linear-gradient(135deg,#6366f1,#06b6d4);
-font-weight:600;
-border-radius:10px;
-transition:.35s;
-}
+.timeline::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 4px; height: 100%; background: linear-gradient(to bottom, #6366f1, #06b6d4); border-radius: 2px; }
 
-.btn-main:hover{
-transform:translateY(-3px) scale(1.03);
-box-shadow:0 10px 40px rgba(99,102,241,.6);
-}
+.timeline-item { position: relative; width: 50%; padding: 2rem 1rem; }
+.timeline-item-left { left: 0; text-align: right; }
+.timeline-item-right { left: 50%; text-align: left; }
+.timeline-dot { width: 16px; height: 16px; background: #6366f1; border-radius: 50%; position: absolute; top: 2rem; transform: translateX(-50%); border: 2px solid white; }
 
-.glass{
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(16px);
-border:1px solid rgba(255,255,255,0.08);
-box-shadow:0 10px 40px rgba(0,0,0,0.4);
-transition:.35s;
-}
-
-.glass:hover{
-transform:translateY(-8px);
-box-shadow:0 20px 60px rgba(99,102,241,.35);
-}
-
-.project:hover{
-transform:translateY(-10px) scale(1.02);
-box-shadow:0 25px 70px rgba(99,102,241,.45);
-}
-
-.progress-bg{
-background:#111827;
-border-radius:20px;
-height:10px;
-overflow:hidden;
-}
-
-.progress-fill{
-height:10px;
-border-radius:20px;
-background:linear-gradient(90deg,#6366f1,#06b6d4);
-animation:skill 2s ease forwards;
-}
-
-@keyframes skill{
-from{width:0}
-}
-
+.education-card { background: rgba(255,255,255,0.05); backdrop-filter: blur(16px); border-radius: 12px; padding: 2rem; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 50px rgba(0,0,0,0.5); margin-bottom: 2rem; }
 </style>
 </head>
 
@@ -99,267 +45,165 @@ from{width:0}
 
 <div id="particles"></div>
 
+<!-- NAVIGATION -->
 <nav class="fixed top-0 w-full bg-black/40 backdrop-blur-xl border-b border-white/10 z-50">
-
 <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
-
-<h1 class="font-bold text-lg text-indigo-400">
-Emon.dev
-</h1>
-
+<h1 class="font-bold text-lg text-indigo-400">Emon.dev</h1>
 <div class="space-x-6 hidden md:flex">
-
 <a href="#about" class="hover:text-indigo-400">About</a>
 <a href="#skills" class="hover:text-indigo-400">Skills</a>
 <a href="#experience" class="hover:text-indigo-400">Experience</a>
 <a href="#education" class="hover:text-indigo-400">Education</a>
 <a href="#projects" class="hover:text-indigo-400">Projects</a>
 <a href="#contact" class="hover:text-indigo-400">Contact</a>
-
 </div>
-
 </div>
-
 </nav>
 
+<!-- HERO SECTION -->
 <section class="hero-bg min-h-screen flex items-center justify-center px-6">
-
 <div class="max-w-6xl w-full flex flex-col md:flex-row items-center md:gap-16 text-center md:text-left">
-
 <div data-aos="zoom-in">
-
-<img
-src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/yeasir_arafat_emon.jpg"
-class="w-64 h-64 md:w-80 md:h-80 rounded-full border-8 border-indigo-500 shadow-2xl object-cover">
-
+<img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/yeasir_arafat_emon.jpg" class="w-64 h-64 md:w-80 md:h-80 rounded-full border-8 border-indigo-500 shadow-2xl object-cover">
 </div>
-
 <div class="flex-1 space-y-6">
-
-<h1 class="text-5xl md:text-6xl font-extrabold text-indigo-400">
-Yeasir Arafat Emon
-</h1>
-
-<h2 class="text-2xl text-gray-200">
-<span id="typing"></span>
-</h2>
-
+<h1 class="text-5xl md:text-6xl font-extrabold text-indigo-400">Yeasir Arafat Emon</h1>
+<h2 class="text-2xl text-gray-200"><span id="typing"></span></h2>
 <p class="text-gray-300 text-lg max-w-xl">
-
-I am an Android developer passionate about building reliable and user-friendly mobile applications.
-My work focuses on creating clean UI, efficient SQLite database systems,
-and applications that remain lightweight and functional even without internet access.
-
+Android developer and tech enthusiast passionate about mobile apps, cybersecurity, and ethical hacking. I create clean, efficient, and functional apps with offline capability.
 </p>
-
 <div class="flex flex-wrap gap-6 justify-center md:justify-start">
-
-<a href="#projects" class="btn-main px-8 py-3">
-View Projects
-</a>
-
-<a href="https://github.com/yeasirarafatemon333" target="_blank"
-class="border border-indigo-400 px-8 py-3 rounded-lg hover:bg-indigo-500 hover:text-black transition">
-GitHub
-</a>
-
+<a href="#projects" class="btn-main px-8 py-3">View Projects</a>
 </div>
-
 </div>
-
 </div>
-
 </section>
 
+<!-- ABOUT -->
 <section id="about" class="py-24 max-w-4xl mx-auto px-6">
-
-<h2 class="text-3xl font-bold mb-8 text-center text-indigo-400" data-aos="fade-up">
-About Me
-</h2>
-
+<h2 class="text-3xl font-bold mb-8 text-center text-indigo-400" data-aos="fade-up">About Me</h2>
 <p class="text-gray-300 text-lg text-center leading-relaxed" data-aos="fade-up">
+Hello! I'm <b>Yeasir Arafat Emon</b>, a Diploma in Computer Technology graduate from Dhaka Polytechnic Institute. I am passionate about technology and constantly exploring ways to apply it creatively. I enjoy building Android applications, developing practical solutions for clients, and enhancing user experiences through clean and efficient designs.
 
-Hello! I'm <b>Yeasir Arafat Emon</b>, an Android application developer from Bangladesh.
-I enjoy building useful mobile applications and learning new technologies.
+Beyond app development, I have a strong interest in ethical hacking and cybersecurity, which drives me to experiment with tools like Kali Linux and learn about network security, vulnerability assessment, and digital safety practices. My goal is to combine software development skills with cybersecurity knowledge to create robust, secure, and user-friendly applications.
 
-My development journey began with curiosity about how mobile apps work.
-Over time I started learning Java and Android development and began building
-applications such as quiz apps, news apps, and productivity tools.
+I have hands-on experience with SQLite databases, UI/UX design, and client-focused projects, which has taught me how to manage requirements, deliver functional applications, and communicate effectively with clients. I am also an enthusiastic lifelong learner, always seeking to expand my knowledge in emerging technologies such as AI, IoT, and secure mobile computing.
 
+Whether it's developing apps, solving technical challenges, or exploring new fields in technology, I am committed to growing as a versatile tech professional and contributing to meaningful projects that make a real difference.
 </p>
-
 </section>
 
+<!-- SKILLS -->
 <section id="skills" class="py-24">
-
-<h2 class="text-3xl font-bold text-center mb-16 text-indigo-400">
-Skills
-</h2>
-
+<h2 class="text-3xl font-bold text-center mb-16 text-indigo-400">Skills</h2>
 <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-10 px-6">
+<div><p class="mb-2">Java</p><div class="progress-bg"><div class="progress-fill w-5/6"></div></div></div>
+<div><p class="mb-2">Python</p><div class="progress-bg"><div class="progress-fill w-3/6"></div></div></div>
+<div><p class="mb-2">Android Development</p><div class="progress-bg"><div class="progress-fill w-3/6"></div></div></div>
+<div><p class="mb-2">API and databases</p><div class="progress-bg"><div class="progress-fill w-4/6"></div></div></div>
 
-<div>
-<p class="mb-2">Java</p>
-<div class="progress-bg"><div class="progress-fill w-5/6"></div></div>
+<div><p class="mb-2">SQLite</p><div class="progress-bg"><div class="progress-fill w-4/5"></div></div></div>
+<div><p class="mb-2">UI / UX</p><div class="progress-bg"><div class="progress-fill w-3/4"></div></div></div>
+<div><p class="mb-2">Ethical Hacking & Cybersecurity</p><div class="progress-bg"><div class="progress-fill w-1/4"></div></div></div>
+<div><p class="mb-2">Kali Linux OS</p><div class="progress-bg"><div class="progress-fill w-1/4"></div></div></div>
 </div>
-
-<div>
-<p class="mb-2">Android Development</p>
-<div class="progress-bg"><div class="progress-fill w-5/6"></div></div>
-</div>
-
-<div>
-<p class="mb-2">SQLite</p>
-<div class="progress-bg"><div class="progress-fill w-4/5"></div></div>
-</div>
-
-<div>
-<p class="mb-2">UI / UX</p>
-<div class="progress-bg"><div class="progress-fill w-3/4"></div></div>
-</div>
-
-</div>
-
 </section>
 
+<!-- EXPERIENCE -->
+<section id="experience" class="py-24 max-w-4xl mx-auto px-6 relative">
+<h2 class="text-3xl font-bold mb-12 text-center text-indigo-400" data-aos="fade-up">Experience</h2>
+<div class="timeline relative">
+
+<!-- Naztech Internship -->
+<div class="timeline-item timeline-item-left">
+<div class="timeline-dot"></div>
+<div class="glass p-6 rounded-xl text-gray-300" data-aos="fade-up">
+<h3 class="text-xl font-bold text-indigo-300">Internship – Naztech</h3>
+<p><b>WASA Billing App Project</b> – Android development during internship for Diploma final semester.<br><b>Duration:</b> Oct 2024 – Jan 2025</p>
+</div>
+</div>
+
+<!-- Freelancing / Client Work -->
+<div class="timeline-item timeline-item-right">
+<div class="timeline-dot"></div>
+<div class="glass p-6 rounded-xl text-gray-300" data-aos="fade-up">
+<h3 class="text-xl font-bold text-indigo-300">Freelancing / Client Projects</h3>
+<p>Developed small Android applications for clients including basic utility apps, task management apps, and educational tools. Learned client communication, requirements gathering, and app deployment.</p>
+</div>
+</div>
+
+<!-- Basic Ethical Hacking Projects -->
+<div class="timeline-item timeline-item-left">
+<div class="timeline-dot"></div>
+<div class="glass p-6 rounded-xl text-gray-300" data-aos="fade-up">
+<h3 class="text-xl font-bold text-indigo-300">Cybersecurity / Ethical Hacking</h3>
+<p>Hands-on practice using Kali Linux basic for testing and network security exercises. Gained foundational understanding of security tools and vulnerability assessment.</p>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education" class="py-24 max-w-4xl mx-auto px-6">
+<h2 class="text-3xl font-bold mb-12 text-center text-indigo-400" data-aos="fade-up">Education</h2>
+<div class="education-card" data-aos="fade-up">
+<h3 class="text-xl font-bold text-indigo-300">Diploma in Enginering in Computer Technology</h3>
+<p>Completed Diploma Enginering at <b>Dhaka Polytechnic Institute, Bangladesh</b>.</p>
+<p class="mt-2">During my diploma, I learned:</p>
+<ul class="list-disc list-inside text-gray-300 mt-2">
+<li>Programming with Java and C</li>
+<li>Android app development and SQLite databases</li>
+<li>Networking fundamentals and system security</li>
+<li>Basic ethical hacking & cybersecurity practices</li>
+<li>Client project development & practical freelancing experience</li>
+<li>Software development lifecycle and project management basics</li>
+</ul>
+</div>
+</section>
+
+<!-- PROJECTS -->
 <section id="projects" class="py-24 px-6">
-
-<h2 class="text-3xl font-bold text-center mb-16 text-indigo-400">
-Projects
-</h2>
-
+<h2 class="text-3xl font-bold text-center mb-16 text-indigo-400">Projects</h2>
 <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
-
 <!-- Project 1 -->
-
 <div class="glass p-6 rounded-xl project" data-aos="zoom-in">
-
-<img
-src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/ss1.jpeg"
-class="rounded-lg mb-4 shadow-md">
-
-<h3 class="text-xl font-bold mb-2 text-indigo-300">
-News Aggregator App
-</h3>
-
-<p class="text-gray-400 mb-4">
-
-An Android application that allows users to read news from multiple Bangladeshi TV channels
-and online news portals in one convenient place.
-
-</p>
-
-<a href="project1.html" class="btn-main px-6 py-3">
-See Details
-</a>
-
+<img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/ss1.jpeg" class="rounded-lg mb-4 shadow-md">
+<h3 class="text-xl font-bold mb-2 text-indigo-300">News Aggregator App</h3>
+<p class="text-gray-400 mb-4">Android app aggregating Bangladeshi TV channels and online news portals in one place.</p>
+<a href="project1.html" class="btn-main px-6 py-3">See Details</a>
 </div>
-
 <!-- Project 2 -->
-
 <div class="glass p-6 rounded-xl project" data-aos="zoom-in">
-
-<img
-src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/sss1.jpeg"
-class="rounded-lg mb-4 shadow-md">
-
-<h3 class="text-xl font-bold mb-2 text-indigo-300">
-VOCAP – Vocabulary Companion
-</h3>
-
-<p class="text-gray-400 mb-4">
-
-A personal vocabulary learning and tracking Android application that helps
-users save new English words, organize them by category, and track their
-vocabulary growth over time.
-
-</p>
-
-<a href="project2.html" class="btn-main px-6 py-3">
-See Details
-</a>
-
+<img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/sss1.jpeg" class="rounded-lg mb-4 shadow-md">
+<h3 class="text-xl font-bold mb-2 text-indigo-300">VOCAP – Vocabulary Companion</h3>
+<p class="text-gray-400 mb-4">Personal vocabulary learning app helping users save, organize, and track English words.</p>
+<a href="project2.html" class="btn-main px-6 py-3">See Details</a>
 </div>
-
 </div>
-
 </section>
 
+<!-- CONTACT -->
 <section id="contact" class="py-24 text-center">
-
-<h2 class="text-3xl font-bold mb-8 text-indigo-400">
-Contact
-</h2>
-
-<p class="mb-4 text-gray-300">
-Email: arafataru38@gmail.com
-</p>
-
-<a href="mailto:arafataru38@gmail.com" class="btn-main px-8 py-3">
-Send Email
-</a>
-
+<h2 class="text-3xl font-bold mb-8 text-indigo-400">Contact</h2>
+<p class="mb-4 text-gray-300">Email: arafataru38@gmail.com</p>
+<a href="mailto:arafataru38@gmail.com" class="btn-main px-8 py-3">Send Email</a>
 </section>
 
-<footer class="text-center py-6 text-gray-400">
-© 2026 Yeasir Arafat Emon
-</footer>
+<footer class="text-center py-6 text-gray-400">© 2026 Yeasir Arafat Emon</footer>
 
 <script>
-
-const words=["Android Developer","Java Programmer","Mobile App Creator"]
-
-let i=0
-let j=0
-let current=""
-let deleting=false
-
-function type(){
-
-current=words[i]
-
-if(!deleting){j++}
-else{j--}
-
-document.getElementById("typing").textContent=current.substring(0,j)
-
-if(!deleting && j==current.length){
-deleting=true
-setTimeout(type,1000)
-return
-}
-
-if(deleting && j==0){
-deleting=false
-i++
-if(i==words.length)i=0
-}
-
-setTimeout(type,100)
-}
-
-type()
-
+const words = ["Android Developer", "Java Programmer", "Mobile App Creator"];
+let i = 0, j = 0, current = "", deleting = false;
+function type() { current = words[i]; if(!deleting){j++} else{j--} document.getElementById("typing").textContent = current.substring(0,j); if(!deleting && j==current.length){deleting=true; setTimeout(type,1000); return;} if(deleting && j==0){deleting=false; i++; if(i==words.length)i=0;} setTimeout(type,100); }
+type();
 </script>
 
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script>AOS.init({duration:1000,once:true});</script>
-
 <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
-
 <script>
-
-tsParticles.load("particles",{
-particles:{
-number:{value:40},
-size:{value:2},
-move:{speed:1},
-links:{enable:true,color:"#6366f1"},
-color:{value:"#6366f1"}
-}
-})
-
+tsParticles.load("particles", { particles:{ number:{value:40}, size:{value:2}, move:{speed:1}, links:{enable:true,color:"#6366f1"}, color:{value:"#6366f1"} } })
 </script>
-
 </body>
 </html>
