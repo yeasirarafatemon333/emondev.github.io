@@ -1,162 +1,622 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>VOCAP – Vocabulary Companion</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
+  :root {
+    --red: #d32f2f;
+    --red-bright: #f44336;
+    --red-dark: #b71c1c;
+    --red-deeper: #8b0000;
+    --red-dim: rgba(211,47,47,0.12);
+    --bg: #080808;
+    --bg2: #0f0f0f;
+    --card: #111111;
+    --card2: #161616;
+    --border: rgba(211,47,47,0.18);
+    --border-subtle: rgba(255,255,255,0.06);
+    --text: #f5f5f5;
+    --muted: #888;
+    --white: #ffffff;
+  }
 
-body{
-background:#0b0b0b;
-}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
 
-/* image hover animation */
+  /* grain */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 999;
+  }
 
-.img:hover{
-transform:scale(1.05);
-box-shadow:0 0 25px rgba(255,0,0,0.5);
-}
+  /* ── HEADER ── */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 18px 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(8,8,8,0.9);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.7rem; letter-spacing: 5px; color: var(--red);
+  }
+  .logo span { color: rgba(245,245,245,0.4); font-size: 0.8rem; letter-spacing: 2px; font-family: 'DM Sans', sans-serif; font-weight: 300; }
+  nav a {
+    color: var(--muted); text-decoration: none;
+    font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase;
+    font-weight: 500; margin-left: 36px; transition: color 0.2s;
+  }
+  nav a:hover { color: var(--red); }
 
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0 56px 88px;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 60% at 80% 30%, rgba(211,47,47,0.15) 0%, transparent 65%),
+      radial-gradient(ellipse 35% 45% at 10% 80%, rgba(211,47,47,0.08) 0%, transparent 60%),
+      linear-gradient(175deg, #0d0d0d 0%, #080808 100%);
+  }
+
+  /* rotating ring */
+  .hero-ring {
+    position: absolute; top: 50%; right: 7%; transform: translateY(-50%);
+    width: 480px; height: 480px; border-radius: 50%;
+    border: 1px solid rgba(211,47,47,0.1);
+    animation: spin-slow 35s linear infinite;
+  }
+  .hero-ring::before {
+    content: ''; position: absolute; inset: 40px; border-radius: 50%;
+    border: 1px solid rgba(211,47,47,0.07);
+    animation: spin-slow 22s linear infinite reverse;
+  }
+  @keyframes spin-slow { to { transform: rotate(360deg); } }
+
+  /* phone mockup matching actual app */
+  .phone-wrap {
+    position: absolute; right: 9%; top: 50%; transform: translateY(-50%);
+    z-index: 2; animation: float 5s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100%{transform:translateY(-50%)} 50%{transform:translateY(calc(-50% - 18px))} }
+
+  .phone {
+    width: 210px; height: 430px;
+    background: #fff;
+    border-radius: 34px;
+    border: 1px solid rgba(211,47,47,0.4);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.8), 0 0 60px rgba(211,47,47,0.18);
+    overflow: hidden; position: relative;
+    display: flex; flex-direction: column;
+  }
+
+  /* splash red top */
+  .ph-top {
+    background: var(--red);
+    padding: 14px 16px 12px;
+    flex-shrink: 0;
+  }
+  .ph-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem; letter-spacing: 3px; color: #fff;
+  }
+  .ph-sub { font-size: 0.55rem; color: rgba(255,255,255,0.7); letter-spacing: 1px; margin-top: 1px; }
+
+  /* search bar */
+  .ph-search {
+    background: #fff; margin: 10px 12px 0;
+    border-radius: 20px; border: 1px solid #e0e0e0;
+    padding: 6px 12px; font-size: 0.65rem; color: #999;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .ph-search-icon { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid #ccc; position: relative; flex-shrink: 0; }
+
+  .ph-body { padding: 8px 12px; display: flex; flex-direction: column; gap: 8px; flex: 1; overflow: hidden; }
+
+  /* word card */
+  .ph-word-card {
+    background: #fff; border-radius: 12px;
+    border: 1px solid #e8e8e8;
+    padding: 10px 11px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .ph-word { font-size: 0.85rem; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+  .ph-def { font-size: 0.55rem; color: #666; line-height: 1.45; margin-bottom: 5px; }
+  .ph-syn { font-size: 0.5rem; color: var(--red); font-weight: 600; }
+  .ph-syn span { color: #555; font-weight: 400; }
+  .ph-tag {
+    display: inline-block; margin-top: 5px;
+    border: 1px solid #ddd; border-radius: 8px;
+    padding: 2px 7px; font-size: 0.48rem; color: #777;
+  }
+
+  /* bottom nav */
+  .ph-nav {
+    background: var(--red);
+    padding: 8px 0 10px;
+    display: flex; justify-content: space-around; align-items: center;
+    flex-shrink: 0;
+  }
+  .ph-nav-item { text-align: center; }
+  .ph-nav-icon { font-size: 0.9rem; display: block; }
+  .ph-nav-label { font-size: 0.42rem; color: rgba(255,255,255,0.8); margin-top: 2px; letter-spacing: 0.5px; }
+  .ph-nav-item.active .ph-nav-label { color: #fff; font-weight: 700; }
+
+  /* scroll indicator */
+  .scroll-ind {
+    position: absolute; bottom: 40px; left: 56px;
+    display: flex; align-items: center; gap: 12px;
+    color: var(--muted); font-size: 0.72rem; letter-spacing: 2px;
+    text-transform: uppercase; z-index: 3;
+    animation: fadeUp 1s 0.9s ease both;
+  }
+  .scroll-line { width: 36px; height: 1px; background: #333; position: relative; overflow: hidden; }
+  .scroll-line::after {
+    content: ''; position: absolute; inset: 0;
+    background: var(--red);
+    animation: scan 1.6s ease-in-out infinite;
+  }
+  @keyframes scan { from{transform:translateX(-100%)} to{transform:translateX(100%)} }
+
+  .hero-content { position: relative; z-index: 3; max-width: 600px; }
+
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--red); border: 1px solid rgba(211,47,47,0.35);
+    padding: 7px 18px; border-radius: 100px; margin-bottom: 28px;
+    animation: fadeUp 0.7s ease both;
+  }
+  .hero-tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: blink 1.5s step-end infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 8vw, 7rem);
+    line-height: 0.93; letter-spacing: 2px; margin-bottom: 26px;
+    animation: fadeUp 0.7s 0.12s ease both;
+  }
+  .hero-title em { font-style: normal; color: var(--red); text-shadow: 0 0 40px rgba(211,47,47,0.4); }
+
+  .hero-desc {
+    font-size: 1rem; color: var(--muted); line-height: 1.8;
+    max-width: 490px; font-weight: 300; margin-bottom: 40px;
+    animation: fadeUp 0.7s 0.24s ease both;
+  }
+
+  .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; animation: fadeUp 0.7s 0.36s ease both; }
+
+  .btn-red {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--red); color: #fff;
+    font-weight: 600; font-size: 0.88rem; letter-spacing: 0.5px;
+    padding: 14px 32px; border-radius: 8px; text-decoration: none;
+    transition: all 0.25s; box-shadow: 0 8px 32px rgba(211,47,47,0.4);
+  }
+  .btn-red:hover { background: var(--red-bright); transform: translateY(-2px); box-shadow: 0 16px 48px rgba(211,47,47,0.55); }
+
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: transparent; color: var(--text); font-weight: 500; font-size: 0.88rem;
+    padding: 14px 28px; border-radius: 8px; text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.1); transition: all 0.25s;
+  }
+  .btn-outline:hover { border-color: rgba(211,47,47,0.5); color: var(--red); }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ── STATS ── */
+  .stats-strip {
+    display: flex;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    background: var(--card);
+  }
+  .stat-item {
+    flex: 1; padding: 40px 20px; text-align: center;
+    border-right: 1px solid var(--border); transition: background 0.3s;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-item:hover { background: rgba(211,47,47,0.05); }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem; color: var(--red); letter-spacing: 2px; line-height: 1;
+  }
+  .stat-lbl { font-size: 0.7rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 8px; font-weight: 500; }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    overflow: hidden; padding: 15px 0;
+    border-bottom: 1px solid var(--border);
+    background: rgba(211,47,47,0.03);
+  }
+  .marquee-track { display: flex; animation: marquee 28s linear infinite; width: max-content; }
+  .marquee-item { display: flex; align-items: center; gap: 14px; padding: 0 32px; font-size: 0.72rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); font-weight: 500; white-space: nowrap; }
+  .msep { color: var(--red); font-size: 0.6rem; }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* ── SECTION ── */
+  .section { padding: 96px 56px; max-width: 1200px; margin: 0 auto; }
+
+  .sec-label {
+    font-size: 0.7rem; color: var(--red); letter-spacing: 4px;
+    text-transform: uppercase; font-weight: 600; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .sec-label::before { content: ''; display: block; width: 24px; height: 2px; background: var(--red); }
+
+  .sec-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.9rem, 3.5vw, 2.8rem); font-weight: 800;
+    line-height: 1.15; margin-bottom: 14px;
+  }
+  .sec-sub { color: var(--muted); font-size: 0.95rem; line-height: 1.75; max-width: 540px; font-weight: 300; margin-bottom: 56px; }
+
+  /* ── FEATURES GRID ── */
+  .feat-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border); border-radius: 18px; overflow: hidden;
+  }
+  .feat-card {
+    background: var(--card); padding: 32px 28px;
+    transition: background 0.3s; position: relative; overflow: hidden;
+  }
+  .feat-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+    transform: scaleX(0); transition: transform 0.4s;
+  }
+  .feat-card:hover::before { transform: scaleX(1); }
+  .feat-card:hover { background: #151515; }
+  .feat-icon {
+    width: 46px; height: 46px; border-radius: 11px;
+    background: var(--red-dim); border: 1px solid rgba(211,47,47,0.22);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.25rem; margin-bottom: 18px; transition: all 0.3s;
+  }
+  .feat-card:hover .feat-icon { background: rgba(211,47,47,0.22); box-shadow: 0 0 22px rgba(211,47,47,0.2); }
+  .feat-title { font-family: 'Syne', sans-serif; font-size: 0.97rem; font-weight: 700; margin-bottom: 9px; }
+  .feat-desc { color: var(--muted); font-size: 0.85rem; line-height: 1.65; font-weight: 300; }
+
+  /* ── FULL LIST ── */
+  .full-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .list-item {
+    display: flex; align-items: flex-start; gap: 11px;
+    padding: 13px 17px; background: var(--card);
+    border: 1px solid var(--border-subtle); border-radius: 10px;
+    font-size: 0.87rem; color: var(--muted);
+    transition: all 0.25s; font-weight: 300;
+  }
+  .list-item:hover { border-color: rgba(211,47,47,0.4); color: var(--text); background: #131313; transform: translateX(4px); }
+  .list-dot { color: var(--red); font-size: 0.6rem; flex-shrink: 0; margin-top: 4px; }
+
+  /* ── SCREENSHOTS ── */
+  .ss-track {
+    display: flex; gap: 18px; overflow-x: auto;
+    scroll-snap-type: x mandatory; padding-bottom: 18px;
+    scrollbar-width: thin; scrollbar-color: var(--red) transparent;
+  }
+  .ss-track::-webkit-scrollbar { height: 3px; }
+  .ss-track::-webkit-scrollbar-thumb { background: var(--red); border-radius: 2px; }
+
+  .ss-card {
+    flex: 0 0 200px; scroll-snap-align: start;
+    border-radius: 20px; overflow: hidden;
+    border: 1px solid rgba(211,47,47,0.2);
+    position: relative; cursor: pointer; transition: all 0.35s;
+  }
+  .ss-card::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(211,47,47,0.4) 0%, transparent 50%);
+    opacity: 0; transition: opacity 0.35s;
+  }
+  .ss-card:hover { transform: scale(1.04) translateY(-8px); box-shadow: 0 24px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(211,47,47,0.45); }
+  .ss-card:hover::after { opacity: 1; }
+  .ss-card img { width: 100%; display: block; transition: transform 0.35s; }
+  .ss-card:hover img { transform: scale(1.05); }
+
+  /* ── TECH ── */
+  .tech-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 36px; }
+  .tech-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px; background: var(--card);
+    border: 1px solid var(--border-subtle); border-radius: 100px;
+    font-size: 0.84rem; font-weight: 500; transition: all 0.25s; cursor: default;
+  }
+  .tech-badge:hover { border-color: rgba(211,47,47,0.45); color: var(--red); background: var(--red-dim); transform: translateY(-2px); }
+  .tech-badge span { color: var(--red); }
+
+  /* ── CTA ── */
+  .cta-block {
+    margin: 0 56px 80px;
+    border-radius: 22px; overflow: hidden;
+    position: relative; border: 1px solid rgba(211,47,47,0.25);
+  }
+  .cta-inner {
+    background: linear-gradient(140deg, #130505 0%, #1a0606 50%, #0d0d0d 100%);
+    padding: 80px 64px; text-align: center; position: relative;
+  }
+  .cta-inner::before {
+    content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+    width: 500px; height: 280px;
+    background: radial-gradient(ellipse, rgba(211,47,47,0.2) 0%, transparent 70%);
+  }
+  .cta-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    letter-spacing: 3px; margin-bottom: 18px;
+    position: relative; z-index: 1;
+  }
+  .cta-title em { font-style: normal; color: var(--red); }
+  .cta-sub { color: var(--muted); font-size: 1rem; margin-bottom: 36px; position: relative; z-index: 1; font-weight: 300; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border); padding: 28px 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 5px; color: var(--red); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.78rem; letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--red); }
+
+  /* ── REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.55s ease, transform 0.55s ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    header { padding: 16px 24px; }
+    nav { display: none; }
+    .hero { padding: 0 24px 72px; }
+    .phone-wrap, .hero-ring { display: none; }
+    .scroll-ind { left: 24px; }
+    .section { padding: 64px 24px; }
+    .cta-block { margin: 0 24px 60px; }
+    .cta-inner { padding: 48px 24px; }
+    footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+    .full-list { grid-template-columns: 1fr; }
+    .stats-strip { flex-wrap: wrap; }
+    .stat-item { flex: 1 1 140px; }
+  }
 </style>
-
 </head>
+<body>
 
-<body class="text-white">
+<!-- HEADER -->
+<header>
+  <div class="logo">VOCAP <span>/ VOCABULARY COMPANION</span></div>
+  <nav>
+    <a href="#features">Features</a>
+    <a href="#screenshots">Screenshots</a>
+    <a href="#tech">Tech</a>
+    <a href="index.html">Portfolio</a>
+  </nav>
+</header>
 
-<div class="max-w-6xl mx-auto px-6 py-16">
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-ring"></div>
 
-<h1 class="text-4xl font-bold mb-6 text-red-500">
-VOCAP – Vocabulary Companion
-</h1>
+  <!-- Phone mockup — matching actual app UI -->
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="ph-top">
+        <div class="ph-logo">VOCAP</div>
+        <div class="ph-sub">Vocabulary Companion expand your Vocabulary</div>
+      </div>
+      <div style="background:#fff; padding: 8px 12px 0;">
+        <div class="ph-search">
+          <div class="ph-search-icon"></div>
+          Search words...
+        </div>
+      </div>
+      <div class="ph-body" style="background:#fff;">
+        <div class="ph-word-card">
+          <div class="ph-word">Innovative</div>
+          <div class="ph-def">Introducing new ideas, methods, or creative solutions that improve something or make it more effective.</div>
+          <div class="ph-syn"><span style="color:var(--red);font-weight:600">Synonyms: </span><span>creative, groundbreaking, inventive</span></div>
+          <div class="ph-syn" style="margin-top:2px"><span style="color:var(--red);font-weight:600">Antonyms: </span><span>traditional, conventional</span></div>
+          <div class="ph-tag">Adjective</div>
+        </div>
+        <div class="ph-word-card" style="opacity:0.75">
+          <div class="ph-word">Brilliant</div>
+          <div class="ph-def">Very intelligent or extremely good</div>
+          <div class="ph-syn"><span style="color:var(--red);font-weight:600">Synonyms: </span><span>intelligent, excellent</span></div>
+          <div class="ph-tag">Adjective</div>
+        </div>
+      </div>
+      <div class="ph-nav">
+        <div class="ph-nav-item active">
+          <span class="ph-nav-icon">🏠</span>
+          <div class="ph-nav-label">Home</div>
+        </div>
+        <div class="ph-nav-item">
+          <span class="ph-nav-icon">🔗</span>
+          <div class="ph-nav-label">Link</div>
+        </div>
+        <div class="ph-nav-item">
+          <span class="ph-nav-icon">＋</span>
+          <div class="ph-nav-label">Add</div>
+        </div>
+        <div class="ph-nav-item">
+          <span class="ph-nav-icon">📊</span>
+          <div class="ph-nav-label">Stats</div>
+        </div>
+        <div class="ph-nav-item">
+          <span class="ph-nav-icon">ℹ️</span>
+          <div class="ph-nav-label">Info</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<p class="text-gray-300 mb-10 text-lg leading-relaxed">
+  <div class="scroll-ind">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
 
-VOCAP – Vocabulary Companion is a personal vocabulary learning and tracking Android application designed to help users improve their English vocabulary in a structured and motivating way.
+  <div class="hero-content">
+    <div class="hero-tag"><div class="hero-tag-dot"></div> Android App · Vocabulary Learning</div>
+    <h1 class="hero-title">
+      YOUR PERSONAL<br>
+      <em>VOCAB</em><br>
+      COMPANION.
+    </h1>
+    <p class="hero-desc">
+      Add words, track streaks, visualize growth, and hear pronunciations — all offline. VOCAP makes vocabulary learning a daily habit.
+    </p>
+    <div class="hero-cta">
+      <a href="#features" class="btn-red">Explore Features →</a>
+      <a href="#screenshots" class="btn-outline">See Screenshots</a>
+    </div>
+  </div>
+</section>
 
-The application works like a personal vocabulary notebook where users can store new words, review them later, and track their vocabulary growth over time.
-
-Unlike many vocabulary apps that rely heavily on internet connectivity, VOCAP focuses on offline learning. Words are stored locally using an SQLite database which allows the application to work smoothly even without internet access.
-
-The goal of this project is to provide a simple but powerful tool that encourages daily vocabulary learning and helps users build a long-term learning habit.
-
-</p>
-
-
-<h2 class="text-2xl font-bold mb-6 text-red-400">
-Key Features
-</h2>
-
-<ul class="list-disc ml-6 text-gray-300 mb-12 space-y-2 leading-relaxed">
-
-<li>Add new vocabulary words with meaning, category and example sentence.</li>
-
-<li>View all saved words in a clean and organized word list.</li>
-
-<li>Edit or update existing words anytime.</li>
-
-<li>Delete words that are no longer needed.</li>
-
-<li>Daily "Word of the Day" feature to encourage consistent learning.</li>
-
-<li>Total words counter showing vocabulary growth.</li>
-
-<li>Category statistics showing nouns, verbs and adjectives.</li>
-
-<li>Learning streak tracker to motivate daily study.</li>
-
-<li>Vocabulary growth chart showing progress over time.</li>
-
-<li>Category distribution chart using a pie or donut chart.</li>
-
-<li>Word pronunciation support using audio playback.</li>
-
-<li>Export vocabulary list as a downloadable PDF.</li>
-
-<li>Share the application easily with friends.</li>
-
-<li>Privacy policy and rating option for user trust.</li>
-
-</ul>
-
-
-<h2 class="text-2xl font-bold mb-6 text-red-400">
-App Screenshots
-</h2>
-
-<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-14">
-
-<img class="rounded-lg img transition duration-300"
-src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/sss1.jpeg">
-
-<img class="rounded-lg img transition duration-300"
-src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/sss2.jpeg">
-
-<img class="rounded-lg img transition duration-300"
-src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/sss3.jpeg">
-
-<img class="rounded-lg img transition duration-300"
-src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/sss4.jpeg">
-
-<img class="rounded-lg img transition duration-300"
-src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/sss5.jpeg">
-
-<img class="rounded-lg img transition duration-300"
-src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/sss6.jpeg">
-
-<img class="rounded-lg img transition duration-300"
-src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/sss7.jpeg">
-
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stat-item"><div class="stat-num">100%</div><div class="stat-lbl">Offline</div></div>
+  <div class="stat-item"><div class="stat-num">14+</div><div class="stat-lbl">Features</div></div>
+  <div class="stat-item"><div class="stat-num">∞</div><div class="stat-lbl">Words to Save</div></div>
+  <div class="stat-item"><div class="stat-num">0</div><div class="stat-lbl">Internet Needed</div></div>
 </div>
 
-
-<h2 class="text-2xl font-bold mb-6 text-red-400">
-Technical Implementation
-</h2>
-
-<p class="text-gray-300 mb-10 leading-relaxed">
-
-VOCAP is developed as a fully offline Android application using Java and Android Studio. The vocabulary words are stored locally using an SQLite database which ensures fast performance and offline accessibility.
-
-The home screen displays the vocabulary list using RecyclerView. Users can add new words through a dedicated form interface. The application also uses chart libraries to visualize vocabulary growth and category statistics.
-
-</p>
-
-
-<h2 class="text-2xl font-bold mb-6 text-red-400">
-Technology Stack
-</h2>
-
-<ul class="list-disc ml-6 text-gray-300 mb-12 space-y-2">
-
-<li>Java</li>
-<li>Android Studio</li>
-<li>SQLite Database</li>
-<li>RecyclerView</li>
-<li>Chart Library for statistics</li>
-
-</ul>
-
-
-<div class="flex flex-wrap gap-4">
-
-<a
-href="index.html"
-class="bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg">
-
-Back to Portfolio
-
-</a>
-
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-item"><span class="msep">●</span> Add Words</div>
+    <div class="marquee-item"><span class="msep">●</span> Daily Streak</div>
+    <div class="marquee-item"><span class="msep">●</span> Word of the Day</div>
+    <div class="marquee-item"><span class="msep">●</span> Offline First</div>
+    <div class="marquee-item"><span class="msep">●</span> PDF Export</div>
+    <div class="marquee-item"><span class="msep">●</span> Pronunciation</div>
+    <div class="marquee-item"><span class="msep">●</span> Growth Chart</div>
+    <div class="marquee-item"><span class="msep">●</span> Category Stats</div>
+    <div class="marquee-item"><span class="msep">●</span> Add Words</div>
+    <div class="marquee-item"><span class="msep">●</span> Daily Streak</div>
+    <div class="marquee-item"><span class="msep">●</span> Word of the Day</div>
+    <div class="marquee-item"><span class="msep">●</span> Offline First</div>
+    <div class="marquee-item"><span class="msep">●</span> PDF Export</div>
+    <div class="marquee-item"><span class="msep">●</span> Pronunciation</div>
+    <div class="marquee-item"><span class="msep">●</span> Growth Chart</div>
+    <div class="marquee-item"><span class="msep">●</span> Category Stats</div>
+  </div>
 </div>
 
+<!-- FEATURES -->
+<div id="features" class="section">
+  <div class="sec-label">Highlights</div>
+  <h2 class="sec-title">Why VOCAP Stands Out</h2>
+  <p class="sec-sub">Structured, visual, and entirely offline — a smarter way to grow your vocabulary every single day.</p>
+
+  <div class="feat-grid">
+    <div class="feat-card reveal"><div class="feat-icon">📖</div><div class="feat-title">Personal Word Notebook</div><div class="feat-desc">Add words with meanings, synonyms, antonyms, categories, and example sentences — your own offline dictionary.</div></div>
+    <div class="feat-card reveal"><div class="feat-icon">🔥</div><div class="feat-title">Streak Tracker</div><div class="feat-desc">Stay motivated with daily learning streaks, word counters, and progress milestones.</div></div>
+    <div class="feat-card reveal"><div class="feat-icon">📊</div><div class="feat-title">Visual Statistics</div><div class="feat-desc">Growth line chart and category donut chart give you a clear picture of your vocabulary journey.</div></div>
+    <div class="feat-card reveal"><div class="feat-icon">🔊</div><div class="feat-title">Audio Pronunciation</div><div class="feat-desc">Tap to hear any word pronounced aloud — perfect for building speaking confidence.</div></div>
+    <div class="feat-card reveal"><div class="feat-icon">📄</div><div class="feat-title">Export to PDF</div><div class="feat-desc">Download your entire vocabulary list as a clean, formatted PDF to study offline or share.</div></div>
+    <div class="feat-card reveal"><div class="feat-icon">⭐</div><div class="feat-title">Word of the Day</div><div class="feat-desc">A fresh featured word every day keeps your learning consistent and keeps things interesting.</div></div>
+  </div>
 </div>
 
+<!-- FULL FEATURE LIST -->
+<div class="section" style="padding-top:0">
+  <div class="sec-label">Full Feature List</div>
+  <h2 class="sec-title">Everything Included</h2>
+  <p class="sec-sub">Fourteen carefully crafted features in one lightweight app.</p>
+  <div class="full-list">
+    <div class="list-item reveal"><span class="list-dot">●</span> Add words with meaning, category & example</div>
+    <div class="list-item reveal"><span class="list-dot">●</span> View all saved words in organized list</div>
+    <div class="list-item reveal"><span class="list-dot">●</span> Edit or update existing words anytime</div>
+    <div class="list-item reveal"><span class="list-dot">●</span> Delete words no longer needed</div>
+    <div class="list-item reveal"><span class="list-dot">●</span> Daily Word of the Day feature</div>
+    <div class="list-item reveal"><span class="list-dot">●</span> Total words counter</div>
+    <div class="list-item reveal"><span class="list-dot">●</span> Noun / Verb / Adjective category stats</div>
+    <div class="list-item reveal"><span class="list-dot">●</span> Learning streak tracker</div>
+    <div class="list-item reveal"><span class="list-dot">●</span> Vocabulary growth chart</div>
+    <div class="list-item reveal"><span class="list-dot">●</span> Category distribution donut chart</div>
+    <div class="list-item reveal"><span class="list-dot">●</span> Word pronunciation audio playback</div>
+    <div class="list-item reveal"><span class="list-dot">●</span> Export vocabulary as PDF</div>
+    <div class="list-item reveal"><span class="list-dot">●</span> Share the app with friends easily</div>
+    <div class="list-item reveal"><span class="list-dot">●</span> Privacy policy & app rating option</div>
+  </div>
+</div>
+
+<!-- SCREENSHOTS -->
+<div id="screenshots" class="section" style="padding-top:0">
+  <div class="sec-label">Preview</div>
+  <h2 class="sec-title">App Screenshots</h2>
+  <p class="sec-sub">Clean red & white interface — bold, readable, and distraction-free.</p>
+
+  <div class="ss-track">
+    <div class="ss-card reveal"><img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/sss1.jpeg" alt="Home Screen" loading="lazy"></div>
+    <div class="ss-card reveal"><img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/sss2.jpeg" alt="Statistics" loading="lazy"></div>
+    <div class="ss-card reveal"><img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/sss3.jpeg" alt="Splash Screen" loading="lazy"></div>
+    <div class="ss-card reveal"><img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/sss4.jpeg" alt="Add Word" loading="lazy"></div>
+    <div class="ss-card reveal"><img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/sss5.jpeg" alt="Word of the Day" loading="lazy"></div>
+    <div class="ss-card reveal"><img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/sss6.jpeg" alt="Screen 6" loading="lazy"></div>
+    <div class="ss-card reveal"><img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/sss7.jpeg" alt="Screen 7" loading="lazy"></div>
+  </div>
+</div>
+
+<!-- TECH STACK -->
+<div id="tech" class="section" style="padding-top:0">
+  <div class="sec-label">Built With</div>
+  <h2 class="sec-title">Technology Stack</h2>
+  <p class="sec-sub">Reliable, battle-tested Android technologies powering every feature.</p>
+  <div class="tech-row">
+    <div class="tech-badge reveal"><span>☕</span> Java</div>
+    <div class="tech-badge reveal"><span>🤖</span> Android Studio</div>
+    <div class="tech-badge reveal"><span>🗄️</span> SQLite Database</div>
+    <div class="tech-badge reveal"><span>♻️</span> RecyclerView</div>
+    <div class="tech-badge reveal"><span>📊</span> Chart Library</div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-block">
+  <div class="cta-inner">
+    <h2 class="cta-title">EXPAND YOUR<br><em>VOCABULARY</em> TODAY</h2>
+    <p class="cta-sub">Free, offline, and beautifully built. Your personal word companion is ready.</p>
+    <a href="index.html" class="btn-red" style="display:inline-flex;font-size:0.95rem;padding:15px 42px;">← Back to Portfolio</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">VOCAP</div>
+  <div class="footer-links">
+    <a href="index.html">← Portfolio</a>
+    <a href="#features">Features</a>
+    <a href="#screenshots">Screenshots</a>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) setTimeout(() => e.target.classList.add('in'), i * 55);
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
 </body>
 </html>
-```
