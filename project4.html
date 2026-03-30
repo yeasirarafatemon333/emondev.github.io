@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wrong Drive — Endless Racing Car Game</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #f5c518;
+  --gold2: #e8a800;
+  --orange: #ff6b1a;
+  --red: #e63b2e;
+  --green: #22c55e;
+  --cyan: #00d4ff;
+  --bg: #06080a;
+  --bg2: #0c0f12;
+  --bg3: #111519;
+  --card: rgba(255,255,255,0.03);
+  --border: rgba(255,255,255,0.07);
+  --text: #f0ece4;
+  --muted: #7a7060;
+  --road-gray: #1a1e22;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;overflow-x:hidden;}
+
+.speed-lines{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.speed-line{
+  position:absolute;left:50%;top:0;width:1px;height:100vh;
+  background:linear-gradient(to bottom,transparent 0%,rgba(245,197,24,0.04) 40%,rgba(245,197,24,0.08) 60%,transparent 100%);
+  transform-origin:top center;animation:speedLine 3s linear infinite;
+}
+@keyframes speedLine{0%{opacity:0;transform:translateX(-50%) scaleY(0);top:-10%;}20%{opacity:1;}80%{opacity:0.3;}100%{opacity:0;transform:translateX(-50%) scaleY(1.5);top:0;}}
+
+.road-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(to bottom, rgba(6,8,10,0.95) 0%, rgba(6,8,10,0.6) 40%, rgba(6,8,10,0.95) 100%),
+    repeating-linear-gradient(to right,var(--bg) 0px,var(--bg) calc(50% - 2px),rgba(245,197,24,0.03) calc(50% - 2px),rgba(245,197,24,0.03) calc(50% + 2px),var(--bg) calc(50% + 2px),var(--bg) 100%);
+}
+
+body::after{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:1;opacity:0.5;
+}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 60px;
+  background:rgba(6,8,10,0.8);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(245,197,24,0.12);
+}
+.nav-logo{font-family:'Black Ops One',cursive;font-size:1.1rem;letter-spacing:3px;color:var(--gold);display:flex;align-items:center;gap:10px;}
+.nav-logo::before{content:'🏎';font-size:1.2rem;}
+.nav-tag{font-family:'Barlow Condensed',sans-serif;font-size:.75rem;letter-spacing:3px;text-transform:uppercase;color:var(--orange);border:1px solid rgba(255,107,26,.35);padding:5px 14px;border-radius:4px;background:rgba(255,107,26,.05);}
+
+.wrap{position:relative;z-index:2;max-width:1160px;margin:0 auto;padding:0 48px;}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:80px;position:relative;overflow:hidden;}
+.hero-wrap{display:grid;grid-template-columns:1.1fr 0.9fr;gap:60px;align-items:center;}
+.hero-road{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 80% 60% at 65% 50%, rgba(245,197,24,0.05) 0%, transparent 70%),radial-gradient(ellipse 40% 80% at 65% 50%, rgba(255,107,26,0.03) 0%, transparent 60%);pointer-events:none;}
+.hero-road::after{content:'';position:absolute;left:55%;top:-10%;bottom:-10%;width:2px;background:linear-gradient(to bottom,transparent,rgba(245,197,24,0.25),transparent);animation:dashMove 1.5s linear infinite;}
+@keyframes dashMove{0%{background-position:0 -100%;}100%{background-position:0 100%;}}
+
+.hero-left{position:relative;z-index:2;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:'Barlow Condensed',sans-serif;font-size:.72rem;letter-spacing:4px;text-transform:uppercase;color:var(--orange);margin-bottom:20px;}
+.hero-eyebrow::before{content:'';width:28px;height:2px;background:var(--orange);}
+
+h1{font-family:'Black Ops One',cursive;font-size:clamp(3.2rem,6vw,5.5rem);line-height:0.95;letter-spacing:2px;margin-bottom:8px;}
+.title-wrong{color:var(--red);text-shadow:0 0 40px rgba(230,59,46,0.5),0 0 80px rgba(230,59,46,0.2);}
+.title-drive{color:var(--gold);text-shadow:0 0 40px rgba(245,197,24,0.4),0 0 80px rgba(245,197,24,0.15);}
+.title-sub{font-family:'Barlow Condensed',sans-serif;font-size:clamp(1rem,2vw,1.3rem);font-weight:300;letter-spacing:6px;text-transform:uppercase;color:var(--muted);margin-bottom:28px;}
+.hero-desc{font-size:1.05rem;color:rgba(240,236,228,0.6);line-height:1.75;margin-bottom:36px;max-width:480px;font-weight:400;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+.btn-fire{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--orange),var(--red));color:#fff;font-family:'Black Ops One',cursive;font-size:.9rem;letter-spacing:2px;padding:14px 32px;border-radius:6px;text-decoration:none;box-shadow:0 8px 32px rgba(255,107,26,.4),0 0 0 1px rgba(255,107,26,.2);transition:all .3s;}
+.btn-fire:hover{transform:translateY(-3px);box-shadow:0 16px 48px rgba(255,107,26,.6);}
+.btn-outline{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:600;letter-spacing:2px;padding:14px 28px;border-radius:6px;text-decoration:none;border:1px solid rgba(245,197,24,.3);transition:all .3s;}
+.btn-outline:hover{border-color:var(--gold);background:rgba(245,197,24,.06);}
+
+.hero-right{position:relative;z-index:2;display:flex;justify-content:center;align-items:center;}
+.phone-cluster{position:relative;width:280px;height:560px;}
+.p-card{position:absolute;width:200px;border-radius:28px;overflow:hidden;border:1.5px solid rgba(245,197,24,0.2);box-shadow:0 30px 80px rgba(0,0,0,0.8);transition:all .6s cubic-bezier(.34,1.56,.64,1);}
+.p-card img{width:100%;height:auto;display:block;}
+.p-card:nth-child(1){top:0;left:40px;z-index:5;border-color:rgba(245,197,24,0.35);box-shadow:0 0 60px rgba(245,197,24,0.15),0 30px 80px rgba(0,0,0,0.9);}
+.p-card:nth-child(2){top:30px;left:80px;z-index:4;filter:brightness(.75);}
+.p-card:nth-child(3){top:55px;left:10px;z-index:3;filter:brightness(.55);}
+.phone-cluster:hover .p-card:nth-child(1){transform:translateY(-12px) rotate(-3deg);}
+.phone-cluster:hover .p-card:nth-child(2){transform:translateY(-4px) rotate(5deg);}
+.phone-cluster:hover .p-card:nth-child(3){transform:translateY(6px) rotate(-6deg);}
+.phone-glow{position:absolute;inset:-60px;background:radial-gradient(ellipse at center,rgba(245,197,24,0.1) 0%,rgba(255,107,26,0.05) 40%,transparent 70%);pointer-events:none;z-index:1;}
+@keyframes heroFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+.phone-cluster{animation:heroFloat 4.5s ease-in-out infinite;}
+
+.ticker{border-top:1px solid rgba(245,197,24,0.15);border-bottom:1px solid rgba(245,197,24,0.15);padding:14px 0;background:rgba(245,197,24,0.02);overflow:hidden;margin-top:60px;}
+.ticker-track{display:flex;width:max-content;animation:ticker 20s linear infinite;}
+.ticker-item{display:flex;align-items:center;gap:14px;padding:0 36px;font-family:'Barlow Condensed',sans-serif;font-size:.75rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.ticker-sep{color:var(--gold);font-size:1rem;}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+section{padding:90px 0;position:relative;z-index:2;}
+.sec-label{display:inline-flex;align-items:center;gap:10px;font-family:'Barlow Condensed',sans-serif;font-size:.72rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.sec-label::before{content:'';width:24px;height:2px;background:var(--gold);}
+.sec-title{font-family:'Black Ops One',cursive;font-size:clamp(1.8rem,3.5vw,2.8rem);letter-spacing:1px;line-height:1.1;margin-bottom:14px;}
+.sec-sub{color:rgba(240,236,228,0.45);font-size:1rem;line-height:1.7;max-width:560px;font-weight:400;margin-bottom:56px;}
+.sec-head{text-align:center;}
+.sec-head .sec-sub{margin:0 auto 56px;}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid rgba(245,197,24,0.12);border-radius:16px;overflow:hidden;background:var(--card);backdrop-filter:blur(20px);margin:0 0 0;}
+.stat{padding:36px 24px;text-align:center;border-right:1px solid rgba(245,197,24,0.08);position:relative;transition:background .3s;}
+.stat:last-child{border-right:none;}
+.stat:hover{background:rgba(245,197,24,0.04);}
+.stat::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:50%;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .3s;}
+.stat:hover::before{opacity:1;}
+.stat-val{font-family:'Black Ops One',cursive;font-size:2.4rem;color:var(--gold);letter-spacing:2px;line-height:1;margin-bottom:6px;display:block;}
+.stat-lbl{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-weight:400;}
+
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.feat{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:32px 28px;position:relative;overflow:hidden;transition:all .35s;}
+.feat::before{content:'';position:absolute;inset:0;border-radius:14px;background:linear-gradient(135deg,rgba(245,197,24,0.05) 0%,transparent 60%);opacity:0;transition:opacity .35s;}
+.feat:hover{border-color:rgba(245,197,24,.3);transform:translateY(-5px);}
+.feat:hover::before{opacity:1;}
+.feat-num{font-family:'Black Ops One',cursive;font-size:3rem;color:rgba(245,197,24,0.06);position:absolute;top:12px;right:20px;line-height:1;letter-spacing:2px;}
+.feat-icon{width:50px;height:50px;border-radius:12px;background:rgba(245,197,24,0.08);border:1px solid rgba(245,197,24,0.15);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:18px;transition:all .3s;}
+.feat:hover .feat-icon{background:rgba(245,197,24,0.15);box-shadow:0 0 24px rgba(245,197,24,0.2);}
+.feat h3{font-family:'Black Ops One',cursive;font-size:.95rem;letter-spacing:1px;margin-bottom:10px;}
+.feat p{font-size:.9rem;color:rgba(240,236,228,0.5);line-height:1.65;font-weight:400;}
+
+.ss-section{background:var(--bg2);}
+.ss-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:16px;align-items:start;}
+.ss-main{border-radius:20px;overflow:hidden;border:2px solid rgba(245,197,24,0.25);box-shadow:0 0 80px rgba(245,197,24,0.1),0 30px 80px rgba(0,0,0,0.7);position:relative;cursor:pointer;transition:all .4s;grid-row:span 2;}
+.ss-main::after{content:'GAMEPLAY';position:absolute;bottom:16px;left:16px;font-family:'Black Ops One',cursive;font-size:.65rem;letter-spacing:3px;color:var(--gold);background:rgba(0,0,0,0.7);padding:6px 12px;border-radius:4px;border:1px solid rgba(245,197,24,0.3);}
+.ss-main:hover{transform:scale(1.02);border-color:var(--gold);}
+.ss-main img{width:100%;height:auto;display:block;}
+.ss-card{border-radius:14px;overflow:hidden;border:1px solid var(--border);position:relative;cursor:pointer;transition:all .35s;}
+.ss-card:hover{transform:translateY(-5px) scale(1.02);border-color:rgba(245,197,24,0.4);box-shadow:0 20px 50px rgba(245,197,24,0.1);}
+.ss-card img{width:100%;height:auto;display:block;}
+.ss-card-label{position:absolute;bottom:0;left:0;right:0;padding:20px 12px 10px;background:linear-gradient(transparent,rgba(0,0,0,0.85));font-family:'Barlow Condensed',sans-serif;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:0;transition:opacity .3s;}
+.ss-card:hover .ss-card-label{opacity:1;}
+
+.showcase-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-bottom:80px;}
+.showcase-phone{display:flex;justify-content:center;}
+.sp-frame{width:220px;border-radius:30px;overflow:hidden;border:2px solid rgba(245,197,24,0.2);box-shadow:0 0 80px rgba(255,107,26,0.15),0 40px 80px rgba(0,0,0,0.8);}
+.sp-frame img{width:100%;height:auto;display:block;}
+.showcase-info h3{font-family:'Black Ops One',cursive;font-size:1.6rem;letter-spacing:1px;margin-bottom:14px;color:var(--gold);}
+.showcase-info p{font-size:1rem;color:rgba(240,236,228,0.55);line-height:1.75;margin-bottom:20px;}
+.tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
+.game-tag{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;border-radius:4px;border:1px solid rgba(245,197,24,0.2);color:var(--gold);background:rgba(245,197,24,0.06);}
+.game-tag.red{border-color:rgba(230,59,46,0.3);color:var(--red);background:rgba(230,59,46,0.06);}
+.game-tag.green{border-color:rgba(34,197,94,0.3);color:var(--green);background:rgba(34,197,94,0.06);}
+.game-tag.cyan{border-color:rgba(0,212,255,0.3);color:var(--cyan);background:rgba(0,212,255,0.06);}
+
+.how-section{background:var(--bg2);}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.step{text-align:center;padding:36px 24px;background:var(--bg3);border:1px solid var(--border);border-radius:14px;transition:all .3s;position:relative;overflow:hidden;}
+.step::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--orange),transparent);transform:scaleX(0);transition:transform .3s;}
+.step:hover{border-color:rgba(255,107,26,.3);transform:translateY(-4px);}
+.step:hover::after{transform:scaleX(1);}
+.step-num{font-family:'Black Ops One',cursive;font-size:3rem;color:rgba(255,107,26,0.12);position:absolute;top:10px;right:16px;line-height:1;}
+.step-icon{font-size:2rem;display:block;margin:0 auto 16px;}
+.step h4{font-family:'Black Ops One',cursive;font-size:.9rem;letter-spacing:1px;margin-bottom:10px;}
+.step p{font-size:.85rem;color:rgba(240,236,228,0.45);line-height:1.6;}
+
+.powerups{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.pu{display:flex;align-items:flex-start;gap:18px;padding:24px 22px;background:var(--bg3);border:1px solid var(--border);border-radius:12px;transition:all .3s;}
+.pu:hover{border-color:rgba(245,197,24,.25);background:rgba(245,197,24,0.02);}
+.pu-icon{width:48px;height:48px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem;}
+.pu-icon.gold{background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.2);}
+.pu-icon.blue{background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.15);}
+.pu-icon.green{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.15);}
+.pu-icon.red{background:rgba(230,59,46,.08);border:1px solid rgba(230,59,46,.15);}
+.pu-icon.orange{background:rgba(255,107,26,.08);border:1px solid rgba(255,107,26,.15);}
+.pu-icon.purple{background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.15);}
+.pu-body h4{font-family:'Black Ops One',cursive;font-size:.88rem;letter-spacing:.5px;margin-bottom:6px;}
+.pu-body p{font-size:.82rem;color:rgba(240,236,228,0.45);line-height:1.5;}
+
+.tech-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.tech-card{padding:28px 20px;text-align:center;background:var(--bg3);border:1px solid var(--border);border-radius:12px;transition:all .3s;}
+.tech-card:hover{border-color:rgba(245,197,24,.3);transform:translateY(-3px);}
+.tech-card .t-icon{font-size:1.8rem;margin-bottom:12px;display:block;}
+.tech-card h4{font-family:'Black Ops One',cursive;font-size:.85rem;letter-spacing:1px;margin-bottom:6px;}
+.tech-card p{font-size:.78rem;color:var(--muted);}
+
+.code-section{background:var(--bg2);}
+.code-box{background:#0d1117;border:1px solid rgba(245,197,24,0.15);border-radius:14px;overflow:hidden;}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(245,197,24,0.04);border-bottom:1px solid rgba(245,197,24,0.1);}
+.code-dots{display:flex;gap:7px;}
+.cd{width:12px;height:12px;border-radius:50%;}
+.cd1{background:#ff5f56;}.cd2{background:#febc2e;}.cd3{background:#27c93f;}
+.code-filename{font-family:'Barlow Condensed',sans-serif;font-size:.75rem;letter-spacing:2px;color:rgba(245,197,24,.5);}
+.code-body{padding:24px 28px;font-family:'Courier New',monospace;font-size:.82rem;line-height:1.8;max-height:300px;overflow-y:auto;}
+.code-body::-webkit-scrollbar{width:4px;}
+.code-body::-webkit-scrollbar-thumb{background:rgba(245,197,24,0.2);}
+.ln{color:rgba(255,255,255,0.15);margin-right:20px;user-select:none;display:inline-block;width:24px;text-align:right;}
+.kw{color:#ff7b72;}.fn{color:#d2a8ff;}.str{color:#a5d6ff;}.cm{color:#8b949e;}.nb{color:#ffa657;}.cl{color:#ffa657;}
+.code-line{display:block;}
+
+.cta-section{background:linear-gradient(135deg, #110700 0%, #0d0900 40%, #06080a 100%);border-top:1px solid rgba(245,197,24,0.1);border-bottom:1px solid rgba(245,197,24,0.1);padding:100px 0;text-align:center;position:relative;overflow:hidden;z-index:2;}
+.cta-section::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(245,197,24,0.08) 0%,rgba(255,107,26,0.04) 40%,transparent 70%);}
+.cta-section h2{font-family:'Black Ops One',cursive;font-size:clamp(2.5rem,5vw,5rem);letter-spacing:3px;margin-bottom:16px;position:relative;z-index:1;}
+.cta-section h2 em{font-style:normal;color:var(--gold);}
+.cta-section p{color:rgba(240,236,228,.45);font-size:1.05rem;margin-bottom:40px;position:relative;z-index:1;}
+
+footer{border-top:1px solid rgba(245,197,24,0.08);padding:40px 0;z-index:2;position:relative;}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;}
+.footer-logo{font-family:'Black Ops One',cursive;font-size:1.1rem;letter-spacing:2px;color:var(--gold);}
+.footer-back{display:inline-flex;align-items:center;gap:8px;color:var(--muted);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:.85rem;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--border);padding:10px 20px;border-radius:6px;transition:all .2s;}
+.footer-back:hover{color:var(--gold);border-color:rgba(245,197,24,.25);}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+@media(max-width:900px){
+  nav{padding:14px 24px;}.wrap{padding:0 20px;}
+  .hero-wrap{grid-template-columns:1fr;}.phone-cluster{display:none;}
+  .stats-row{grid-template-columns:1fr 1fr;}.features-grid{grid-template-columns:1fr 1fr;}
+  .ss-grid{grid-template-columns:1fr 1fr;}.ss-main{grid-row:span 1;}
+  .steps{grid-template-columns:1fr 1fr;}.powerups{grid-template-columns:1fr 1fr;}.tech-grid{grid-template-columns:1fr 1fr;}
+  .showcase-grid{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .features-grid{grid-template-columns:1fr;}.stats-row{grid-template-columns:1fr 1fr;}
+  .steps{grid-template-columns:1fr;}.powerups{grid-template-columns:1fr;}
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+.fade-1{animation:fadeUp .9s ease both;}
+.fade-2{animation:fadeUp .9s .15s ease both;opacity:0;}
+.fade-3{animation:fadeUp .9s .3s ease both;opacity:0;}
+.fade-4{animation:fadeUp .9s .45s ease both;opacity:0;}
+.fade-5{animation:fadeUp .9s .6s ease both;opacity:0;}
+</style>
+</head>
+<body>
+
+<div class="road-bg"></div>
+<div class="speed-lines" id="speedLines"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">WRONG DRIVE</div>
+  <div class="nav-tag">🏁 Android Racing Game</div>
+</nav>
+
+<!-- ════════ HERO ════════ -->
+<section class="hero">
+  <div class="hero-road"></div>
+  <div class="wrap">
+    <div class="hero-wrap">
+      <div class="hero-left">
+        <div class="hero-eyebrow fade-1">Endless Racing Game</div>
+        <h1>
+          <span class="title-wrong fade-2">WRONG</span><br>
+          <span class="title-drive fade-3">DRIVE</span>
+        </h1>
+        <div class="title-sub fade-3">ENDLESS RACING CAR GAME</div>
+        <p class="hero-desc fade-4">
+          Race at breakneck speed on the wrong side of the road. Dodge oncoming traffic, collect gold coins, activate shields, and survive as long as you can. Every second is life or death.
+        </p>
+        <div class="hero-btns fade-5">
+          <a href="https://play.google.com/store/apps/details?id=com.artechandsoft.cargame" target="_blank" class="btn-fire">🔥 Get on Play Store</a>
+          <a href="#features" class="btn-outline">Explore Features →</a>
+        </div>
+      </div>
+      <div class="hero-right fade-4">
+        <div class="phone-glow"></div>
+        <div class="phone-cluster">
+          <div class="p-card">
+            <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/SS1.jpeg" alt="Gameplay">
+          </div>
+          <div class="p-card">
+            <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/gss.jpeg" alt="Shield Active">
+          </div>
+          <div class="p-card">
+            <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/gss2.jpeg" alt="Racing">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row reveal" style="margin-top:60px;">
+      <div class="stat"><span class="stat-val">∞</span><span class="stat-lbl">Endless Road</span></div>
+      <div class="stat"><span class="stat-val">5+</span><span class="stat-lbl">Enemy Cars</span></div>
+      <div class="stat"><span class="stat-val">3</span><span class="stat-lbl">Jump Charges</span></div>
+      <div class="stat"><span class="stat-val">FREE</span><span class="stat-lbl">To Play</span></div>
+    </div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <div class="ticker-item"><span class="ticker-sep">⚡</span>Dodge Traffic</div>
+      <div class="ticker-item"><span class="ticker-sep">🪙</span>Collect Gold</div>
+      <div class="ticker-item"><span class="ticker-sep">🛡️</span>Activate Shield</div>
+      <div class="ticker-item"><span class="ticker-sep">⚡</span>Turbo Jump</div>
+      <div class="ticker-item"><span class="ticker-sep">🏎</span>Beat Your Best Score</div>
+      <div class="ticker-item"><span class="ticker-sep">🔥</span>Speed Increases</div>
+      <div class="ticker-item"><span class="ticker-sep">💀</span>Crash = Game Over</div>
+      <div class="ticker-item"><span class="ticker-sep">⚡</span>Dodge Traffic</div>
+      <div class="ticker-item"><span class="ticker-sep">🪙</span>Collect Gold</div>
+      <div class="ticker-item"><span class="ticker-sep">🛡️</span>Activate Shield</div>
+      <div class="ticker-item"><span class="ticker-sep">⚡</span>Turbo Jump</div>
+      <div class="ticker-item"><span class="ticker-sep">🏎</span>Beat Your Best Score</div>
+      <div class="ticker-item"><span class="ticker-sep">🔥</span>Speed Increases</div>
+      <div class="ticker-item"><span class="ticker-sep">💀</span>Crash = Game Over</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ FEATURES ════════ -->
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label reveal">Core Gameplay</div>
+      <h2 class="sec-title reveal">Built for Adrenaline</h2>
+      <p class="sec-sub reveal">Every mechanic designed to push players to the edge of their reflexes</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat reveal">
+        <div class="feat-num">01</div>
+        <div class="feat-icon">🚗</div>
+        <h3>Wrong Lane Racing</h3>
+        <p>Drive head-on against oncoming traffic at increasing speed. Swipe to dodge. One mistake ends the run.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="feat-num">02</div>
+        <div class="feat-icon">⚡</div>
+        <h3>Turbo Jump System</h3>
+        <p>Swipe up to launch into the air and soar over enemy cars. Limited charges — use them wisely or earn more by watching ads.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="feat-num">03</div>
+        <div class="feat-icon">🛡️</div>
+        <h3>Shield Power-Up</h3>
+        <p>Collect shield pickups on the road for crash immunity. Buy a shop shield before the game starts for extended protection.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="feat-num">04</div>
+        <div class="feat-icon">🪙</div>
+        <h3>Coin Economy</h3>
+        <p>Gold coins spawn on the road during play. Collect them to spend in the in-game shop on power-ups between rounds.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="feat-num">05</div>
+        <div class="feat-icon">❤️</div>
+        <h3>Lifeline System</h3>
+        <p>Crash, but not dead yet — watch a rewarded ad to continue from where you left off. Multiple lifelines per game.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="feat-num">06</div>
+        <div class="feat-icon">📈</div>
+        <h3>Progressive Difficulty</h3>
+        <p>Speed ramps up every second. New enemy cars join traffic as your score climbs. Up to 6 enemies on road at once.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ SCREENSHOTS ════════ -->
+<section id="screenshots" class="ss-section">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label reveal">In-Game Preview</div>
+      <h2 class="sec-title reveal">See It On Screen</h2>
+      <p class="sec-sub reveal">Real gameplay — no filters, no mockups</p>
+    </div>
+    <div class="ss-grid reveal">
+      <!-- Main large screenshot: ss main.jpeg -->
+      <div class="ss-main">
+        <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/ss%20main.jpeg" alt="Main Gameplay">
+      </div>
+      <!-- gss.jpeg -->
+      <div class="ss-card">
+        <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/gss.jpeg" alt="Shield Active">
+        <div class="ss-card-label">Shield Active</div>
+      </div>
+      <!-- real ss  1.jpeg -->
+      <div class="ss-card">
+        <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/real%20ss%20%201.jpeg" alt="Live Action">
+        <div class="ss-card-label">Live Action</div>
+      </div>
+      <!-- SS1.jpeg -->
+      <div class="ss-card">
+        <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/SS1.jpeg" alt="Home Screen">
+        <div class="ss-card-label">Home Screen</div>
+      </div>
+      <!-- gss2.jpeg -->
+      <div class="ss-card">
+        <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/gss2.jpeg" alt="Racing Action">
+        <div class="ss-card-label">Racing Action</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ GAMEPLAY SHOWCASE ════════ -->
+<section>
+  <div class="wrap">
+    <div class="showcase-grid reveal">
+      <div class="showcase-phone">
+        <div class="sp-frame">
+          <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/real%20ss%20%201.jpeg" alt="Gameplay">
+        </div>
+      </div>
+      <div class="showcase-info">
+        <div class="sec-label">Live Combat</div>
+        <h3>Dodge or Die</h3>
+        <p>The road fills with enemy cars as your score climbs. Swipe left and right to weave through traffic, or tap the jump button to launch over them. The shield aura protects you from hits — but it doesn't last forever.</p>
+        <p>The HUD tracks your score, jump charges, coin count, and remaining lifelines in real time — all visible in a single glance.</p>
+        <div class="tag-row">
+          <span class="game-tag">Swipe Controls</span>
+          <span class="game-tag red">Crash Detection</span>
+          <span class="game-tag green">Shield Aura</span>
+          <span class="game-tag cyan">Real-Time HUD</span>
+        </div>
+      </div>
+    </div>
+    <div class="showcase-grid reveal" style="direction:rtl;">
+      <div class="showcase-phone" style="direction:ltr;">
+        <div class="sp-frame">
+          <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/SS1.jpeg" alt="Home Screen">
+        </div>
+      </div>
+      <div class="showcase-info" style="direction:ltr;">
+        <div class="sec-label">Home & Shop</div>
+        <h3>Prepare Before You Race</h3>
+        <p>The home screen shows your best score and coin balance before you start. Open the Shop to buy extra jumps or a pre-game shield using coins collected during previous runs.</p>
+        <p>Watch rewarded ads to earn bonus coins directly from the shop — no grind required.</p>
+        <div class="tag-row">
+          <span class="game-tag">Best Score Display</span>
+          <span class="game-tag red">Coin Shop</span>
+          <span class="game-tag green">+3 Jumps</span>
+          <span class="game-tag cyan">Pre-Game Shield</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ HOW TO PLAY ════════ -->
+<section class="how-section">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label reveal">Controls</div>
+      <h2 class="sec-title reveal">How to Play</h2>
+      <p class="sec-sub reveal">Simple to learn. Impossible to master.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <span class="step-icon">👆</span>
+        <h4>Tap Start</h4>
+        <p>Hit START PLAY on the home screen. Visit the shop first if you have coins to spend.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <span class="step-icon">↔️</span>
+        <h4>Swipe to Dodge</h4>
+        <p>Drag your finger left or right to steer the car and avoid incoming traffic.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">03</div>
+        <span class="step-icon">⬆️</span>
+        <h4>Swipe Up to Jump</h4>
+        <p>Swipe upward or tap the JUMP button to launch over enemies. 3 charges per game.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">04</div>
+        <span class="step-icon">🏆</span>
+        <h4>Survive & Score</h4>
+        <p>Keep dodging. Beat your best score. Spend coins in the shop for the next run.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ POWER-UPS ════════ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label reveal">Arsenal</div>
+      <h2 class="sec-title reveal">Power-Ups & Items</h2>
+      <p class="sec-sub reveal">Six ways to gain the edge on the wrong lane</p>
+    </div>
+    <div class="powerups">
+      <div class="pu reveal">
+        <div class="pu-icon blue">🛡️</div>
+        <div class="pu-body">
+          <h4>Road Shield</h4>
+          <p>Pick up from the road for crash immunity. Absorbs hits then disappears.</p>
+        </div>
+      </div>
+      <div class="pu reveal">
+        <div class="pu-icon gold">🪙</div>
+        <div class="pu-body">
+          <h4>Gold Coins</h4>
+          <p>Spawned along the road. Collect to build your shop currency for future runs.</p>
+        </div>
+      </div>
+      <div class="pu reveal">
+        <div class="pu-icon green">⚡</div>
+        <div class="pu-body">
+          <h4>Jump Boost</h4>
+          <p>Launch your car into the air over enemies. 3 base charges, refillable via ads or shop.</p>
+        </div>
+      </div>
+      <div class="pu reveal">
+        <div class="pu-icon cyan">💎</div>
+        <div class="pu-body">
+          <h4>Shop Shield (8 sec)</h4>
+          <p>Buy before the game for 8 seconds of continuous protection at game start. Costs 80 coins.</p>
+        </div>
+      </div>
+      <div class="pu reveal">
+        <div class="pu-icon orange">❤️</div>
+        <div class="pu-body">
+          <h4>Lifeline Continue</h4>
+          <p>Watch a rewarded ad after crashing to revive and continue from the same score.</p>
+        </div>
+      </div>
+      <div class="pu reveal">
+        <div class="pu-icon red">🎯</div>
+        <div class="pu-body">
+          <h4>+3 Shop Jumps</h4>
+          <p>Buy an extra jump pack for 50 coins. Activates at the start of the next game.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ TECH STACK ════════ -->
+<section class="ss-section" id="tech">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label reveal">Under the Hood</div>
+      <h2 class="sec-title reveal">Tech Stack</h2>
+      <p class="sec-sub reveal">Built entirely with native Android — no game engine needed</p>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-card reveal">
+        <span class="t-icon">☕</span>
+        <h4>Java</h4>
+        <p>Core language — all game logic written in pure Java</p>
+      </div>
+      <div class="tech-card reveal">
+        <span class="t-icon">🎨</span>
+        <h4>Canvas API</h4>
+        <p>Custom 2D rendering via Android Canvas & Paint — no Unity, no LibGDX</p>
+      </div>
+      <div class="tech-card reveal">
+        <span class="t-icon">🗄️</span>
+        <h4>SharedPreferences</h4>
+        <p>Persistent best score, coin balance, music settings, equipped items</p>
+      </div>
+      <div class="tech-card reveal">
+        <span class="t-icon">📢</span>
+        <h4>Google AdMob</h4>
+        <p>Rewarded ads for jumps, lifelines, and coin rewards via GDPR-compliant UMP</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ CODE SNIPPET ════════ -->
+<section class="code-section">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label reveal">Source</div>
+      <h2 class="sec-title reveal">Code Highlights</h2>
+      <p class="sec-sub reveal">A peek into the collision detection and shield system</p>
+    </div>
+    <div class="code-box reveal">
+      <div class="code-header">
+        <div class="code-dots"><div class="cd cd1"></div><div class="cd cd2"></div><div class="cd cd3"></div></div>
+        <div class="code-filename">GameView.java — Shield & Collision Logic</div>
+        <div style="font-size:.7rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;">Java</div>
+      </div>
+      <div class="code-body">
+<span class="code-line"><span class="ln">1</span><span class="cm">// ── COLLISION CHECK (per enemy, per frame) ──</span></span>
+<span class="code-line"><span class="ln">2</span><span class="kw">int</span> m = <span class="nb">40</span>; <span class="cm">// margin for pixel-perfect feel</span></span>
+<span class="code-line"><span class="ln">3</span><span class="kw">if</span> (carX+m &lt; enemyX[i]+enemyWidth-m &amp;&amp;</span>
+<span class="code-line"><span class="ln">4</span>    carX+carWidth-m &gt; enemyX[i]+m &amp;&amp;</span>
+<span class="code-line"><span class="ln">5</span>    carY+m &lt; enemyY[i]+enemyHeight-m &amp;&amp;</span>
+<span class="code-line"><span class="ln">6</span>    carY+carHeight-m &gt; enemyY[i]+m) {</span>
+<span class="code-line"><span class="ln">7</span></span>
+<span class="code-line"><span class="ln">8</span>    <span class="kw">if</span> (<span class="fn">shieldActive</span>) {</span>
+<span class="code-line"><span class="ln">9</span>        <span class="cm">// Shield absorbs the hit — no damage</span></span>
+<span class="code-line"><span class="ln">10</span>        shieldActive = <span class="kw">false</span>;</span>
+<span class="code-line"><span class="ln">11</span>        enemyY[i] = h + <span class="nb">100</span>; <span class="cm">// push enemy off screen</span></span>
+<span class="code-line"><span class="ln">12</span>    } <span class="kw">else</span> {</span>
+<span class="code-line"><span class="ln">13</span>        <span class="fn">stopAllSounds</span>();</span>
+<span class="code-line"><span class="ln">14</span>        <span class="kw">if</span> (isMusicOn) crashSound.<span class="fn">start</span>();</span>
+<span class="code-line"><span class="ln">15</span>        <span class="kw">if</span> (lifelineUsed &lt; MAX_LIFELINES) {</span>
+<span class="code-line"><span class="ln">16</span>            <span class="cm">// Show lifeline prompt — watch ad to continue</span></span>
+<span class="code-line"><span class="ln">17</span>            isPaused = <span class="kw">true</span>;</span>
+<span class="code-line"><span class="ln">18</span>            showLifelinePrompt = <span class="kw">true</span>;</span>
+<span class="code-line"><span class="ln">19</span>        } <span class="kw">else</span> {</span>
+<span class="code-line"><span class="ln">20</span>            isGameOver = <span class="kw">true</span>; <span class="cm">// no lives left</span></span>
+<span class="code-line"><span class="ln">21</span>        }</span>
+<span class="code-line"><span class="ln">22</span>    }</span>
+<span class="code-line"><span class="ln">23</span>}</span>
+<span class="code-line"><span class="ln">24</span></span>
+<span class="code-line"><span class="ln">25</span><span class="cm">// ── JUMP ARC PHYSICS ──</span></span>
+<span class="code-line"><span class="ln">26</span><span class="kw">private float</span> <span class="fn">arcOffset</span>(<span class="kw">float</span> p) {</span>
+<span class="code-line"><span class="ln">27</span>    <span class="kw">return</span> (<span class="kw">float</span>)(Math.<span class="fn">sin</span>(p * Math.PI) * JUMP_PEAK);</span>
+<span class="code-line"><span class="ln">28</span>}</span>
+<span class="code-line"><span class="ln">29</span><span class="kw">private float</span> <span class="fn">arcScale</span>(<span class="kw">float</span> p) {</span>
+<span class="code-line"><span class="ln">30</span>    <span class="kw">return</span> <span class="nb">1f</span> + (JUMP_SCALE_MAX-<span class="nb">1f</span>) *</span>
+<span class="code-line"><span class="ln">31</span>           (<span class="kw">float</span>)(Math.<span class="fn">sin</span>(p * Math.PI));</span>
+<span class="code-line"><span class="ln">32</span>}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ CTA ════════ -->
+<div class="cta-section">
+  <div class="wrap">
+    <h2>READY TO<br><em>RACE WRONG?</em></h2>
+    <p>Download on the Play Store — dodge, survive, beat your best score.</p>
+    <a href="https://play.google.com/store/apps/details?id=com.artechandsoft.cargame" target="_blank" class="btn-fire" style="display:inline-flex;font-size:1rem;padding:16px 44px;">
+      🏁 Download on Play Store →
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="footer-logo">WRONG DRIVE</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;color:var(--muted);letter-spacing:1px;">
+        Built with Java · Android Canvas · AdMob
+      </div>
+      <a href="index.html" class="footer-back">← Back to Portfolio</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const container = document.getElementById('speedLines');
+for(let i = 0; i < 18; i++){
+  const line = document.createElement('div');
+  line.className = 'speed-line';
+  const leftPct = 20 + Math.random() * 60;
+  line.style.cssText = `left:${leftPct}%;animation-delay:${Math.random()*3}s;animation-duration:${2+Math.random()*3}s;opacity:${0.03+Math.random()*0.07};`;
+  container.appendChild(line);
+}
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach((el,i) => {
+  el.style.transitionDelay = (i % 5) * 0.08 + 's';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
