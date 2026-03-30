@@ -1,221 +1,803 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>BudgetBuddy - Income & Expense Manager</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
+<title>BudgetBuddy — Smart Finance Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
-body{
-background:#0b0b0b;
-}
+  :root {
+    --teal: #00b894;
+    --teal-dark: #00897b;
+    --teal-glow: rgba(0,184,148,0.25);
+    --red: #ff4757;
+    --bg: #080c10;
+    --bg2: #0d1117;
+    --bg3: #111820;
+    --card: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.07);
+    --text: #e8f0f7;
+    --muted: #7a8a99;
+    --income: #00d68f;
+    --expense: #ff4757;
+  }
 
-/* red glow hover */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-.img:hover{
-transform:scale(1.05);
-box-shadow:0 0 25px rgba(255,0,0,0.5);
-}
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0;
+    opacity: .4;
+  }
+
+  /* ── GRID BG ── */
+  .grid-bg {
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(0,184,148,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,184,148,.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  /* ── GLOW ORBS ── */
+  .orb {
+    position: fixed; border-radius: 50%;
+    filter: blur(120px); pointer-events: none; z-index: 0;
+  }
+  .orb1 { width: 600px; height: 600px; background: rgba(0,184,148,.07); top: -200px; left: -100px; }
+  .orb2 { width: 500px; height: 500px; background: rgba(255,71,87,.05); bottom: 0; right: -100px; }
+  .orb3 { width: 300px; height: 300px; background: rgba(0,184,148,.06); top: 50%; left: 50%; transform: translate(-50%,-50%); }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(8,12,16,.7);
+    backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem; font-weight: 800;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-dot {
+    width: 28px; height: 28px;
+    background: var(--teal);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .75rem;
+  }
+  .nav-tag {
+    font-size: .78rem; font-weight: 500;
+    color: var(--teal);
+    border: 1px solid rgba(0,184,148,.3);
+    padding: 6px 16px; border-radius: 100px;
+    letter-spacing: .5px;
+  }
+
+  /* ── WRAPPER ── */
+  .wrap { position: relative; z-index: 1; max-width: 1140px; margin: 0 auto; padding: 0 40px; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding-top: 100px;
+  }
+  .hero-inner {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center;
+  }
+  .hero-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: .78rem; color: var(--teal); letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 600;
+    margin-bottom: 24px;
+  }
+  .hero-label span { display: inline-block; width: 32px; height: 1px; background: var(--teal); }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    font-weight: 800; line-height: 1.08;
+    letter-spacing: -1px;
+    margin-bottom: 24px;
+  }
+  h1 .accent { color: var(--teal); }
+  .hero-desc {
+    font-size: 1.05rem; color: var(--muted);
+    line-height: 1.75; margin-bottom: 40px;
+    font-weight: 300;
+  }
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--teal);
+    color: #000; font-weight: 700;
+    padding: 14px 32px; border-radius: 12px;
+    font-size: .95rem; text-decoration: none;
+    font-family: 'Syne', sans-serif;
+    transition: all .3s;
+    box-shadow: 0 0 30px rgba(0,184,148,.3);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px rgba(0,184,148,.5);
+  }
+  .btn-ghost {
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 14px 32px; border-radius: 12px;
+    font-size: .95rem; text-decoration: none;
+    font-family: 'Syne', sans-serif;
+    transition: all .3s;
+    background: var(--card);
+    backdrop-filter: blur(10px);
+  }
+  .btn-ghost:hover { border-color: var(--teal); color: var(--teal); }
+
+  /* ── PHONE MOCKUP ── */
+  .phone-wrap {
+    display: flex; justify-content: center; align-items: center;
+    position: relative;
+  }
+  .phone-stack {
+    position: relative; width: 260px; height: 520px;
+  }
+  .phone-card {
+    position: absolute;
+    width: 230px; border-radius: 28px; overflow: hidden;
+    border: 2px solid rgba(255,255,255,.08);
+    box-shadow: 0 30px 80px rgba(0,0,0,.6);
+    transition: all .5s cubic-bezier(.34,1.56,.64,1);
+  }
+  .phone-card img { width: 100%; height: auto; display: block; }
+  .phone-card:nth-child(1) { top: 0; left: 30px; z-index: 4; }
+  .phone-card:nth-child(2) { top: 20px; left: 0; z-index: 3; filter: brightness(.8); }
+  .phone-card:nth-child(3) { top: 40px; left: 55px; z-index: 2; filter: brightness(.65); }
+  .phone-card:nth-child(4) { top: 60px; left: 20px; z-index: 1; filter: brightness(.5); }
+  .phone-wrap:hover .phone-card:nth-child(1) { transform: translateY(-10px) rotate(-2deg); }
+  .phone-wrap:hover .phone-card:nth-child(2) { transform: translateY(-5px) rotate(3deg); }
+  .phone-wrap:hover .phone-card:nth-child(3) { transform: translateY(5px) rotate(-4deg); }
+  .phone-glow {
+    position: absolute; inset: -40px;
+    background: radial-gradient(ellipse at center, rgba(0,184,148,.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    display: flex; gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--card);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+    margin: 80px 0;
+  }
+  .stat-item {
+    flex: 1; padding: 32px 24px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-item::before {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 60%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--teal), transparent);
+    opacity: 0; transition: opacity .3s;
+  }
+  .stat-item:hover::before { opacity: 1; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem; font-weight: 800;
+    color: var(--teal); display: block;
+    margin-bottom: 4px;
+  }
+  .stat-label { font-size: .8rem; color: var(--muted); letter-spacing: .5px; }
+
+  /* ── SECTION TITLE ── */
+  .section-head { text-align: center; margin-bottom: 60px; }
+  .section-head h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 800; letter-spacing: -.5px;
+    margin-bottom: 12px;
+  }
+  .section-head p { color: var(--muted); font-size: 1rem; font-weight: 300; }
+  .section-badge {
+    display: inline-block;
+    font-size: .7rem; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--teal);
+    margin-bottom: 14px; font-weight: 600;
+  }
+
+  /* ── FEATURES ── */
+  .features-section { padding: 80px 0; }
+  .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .feat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px; padding: 32px 28px;
+    transition: all .35s;
+    position: relative; overflow: hidden;
+  }
+  .feat-card::after {
+    content: ''; position: absolute;
+    inset: 0; border-radius: 20px;
+    background: linear-gradient(135deg, rgba(0,184,148,.05) 0%, transparent 60%);
+    opacity: 0; transition: opacity .35s;
+  }
+  .feat-card:hover { border-color: rgba(0,184,148,.3); transform: translateY(-4px); }
+  .feat-card:hover::after { opacity: 1; }
+  .feat-icon {
+    width: 48px; height: 48px;
+    background: rgba(0,184,148,.12);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; margin-bottom: 20px;
+    border: 1px solid rgba(0,184,148,.2);
+  }
+  .feat-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .feat-card p { font-size: .88rem; color: var(--muted); line-height: 1.65; font-weight: 300; }
+
+  /* ── SCREENSHOTS ── */
+  .screenshots-section { padding: 80px 0; }
+  .ss-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .ss-card {
+    border-radius: 24px; overflow: hidden;
+    border: 1px solid var(--border);
+    position: relative; cursor: pointer;
+    transition: all .4s cubic-bezier(.34,1.56,.64,1);
+  }
+  .ss-card::before {
+    content: ''; position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(to top, rgba(0,0,0,.8) 0%, transparent 50%);
+    opacity: 0; transition: opacity .3s;
+  }
+  .ss-card:hover { transform: translateY(-8px) scale(1.02); border-color: var(--teal); box-shadow: 0 0 40px rgba(0,184,148,.2); }
+  .ss-card:hover::before { opacity: 1; }
+  .ss-card img { width: 100%; height: auto; display: block; }
+  .ss-label {
+    position: absolute; bottom: 14px; left: 14px; z-index: 2;
+    font-size: .75rem; font-weight: 600;
+    color: var(--teal); letter-spacing: .5px;
+    opacity: 0; transform: translateY(8px);
+    transition: all .3s;
+    font-family: 'Syne', sans-serif;
+  }
+  .ss-card:hover .ss-label { opacity: 1; transform: translateY(0); }
+
+  /* ── HOW IT WORKS ── */
+  .how-section { padding: 80px 0; }
+  .steps {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; position: relative;
+  }
+  .steps::before {
+    content: '';
+    position: absolute; top: 40px; left: 15%; right: 15%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--teal), transparent);
+    z-index: 0;
+  }
+  .step {
+    text-align: center; padding: 40px 30px;
+    position: relative; z-index: 1;
+  }
+  .step-num {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--bg3);
+    border: 2px solid rgba(0,184,148,.3);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem; font-weight: 800;
+    color: var(--teal);
+    box-shadow: 0 0 30px rgba(0,184,148,.15);
+    transition: all .3s;
+  }
+  .step:hover .step-num {
+    background: var(--teal); color: #000;
+    box-shadow: 0 0 50px rgba(0,184,148,.4);
+    transform: scale(1.1);
+  }
+  .step h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .step p { font-size: .88rem; color: var(--muted); line-height: 1.6; font-weight: 300; }
+
+  /* ── TECH STACK ── */
+  .tech-section { padding: 80px 0; }
+  .tech-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .tech-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px 20px;
+    text-align: center;
+    transition: all .3s;
+  }
+  .tech-card:hover { border-color: rgba(0,184,148,.35); transform: translateY(-3px); }
+  .tech-icon { font-size: 2rem; margin-bottom: 14px; display: block; }
+  .tech-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: .95rem; font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .tech-card p { font-size: .78rem; color: var(--muted); font-weight: 300; }
+
+  /* ── BALANCE WIDGET ── */
+  .balance-section { padding: 80px 0; }
+  .balance-showcase {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 28px; padding: 50px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 50px; align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .balance-showcase::before {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(0,184,148,.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .balance-left h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem; font-weight: 800;
+    line-height: 1.2; margin-bottom: 20px;
+    letter-spacing: -.5px;
+  }
+  .balance-left p { color: var(--muted); line-height: 1.7; font-weight: 300; margin-bottom: 30px; }
+  .fake-ui {
+    background: #0d1117;
+    border-radius: 20px; padding: 24px;
+    border: 1px solid var(--border);
+  }
+  .fake-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 20px;
+  }
+  .fake-title { font-family: 'Syne', sans-serif; font-size: .85rem; font-weight: 700; color: var(--muted); }
+  .fake-date { font-size: .75rem; color: var(--muted); }
+  .balance-row {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px; margin-bottom: 20px;
+  }
+  .bal-item { text-align: center; }
+  .bal-label { font-size: .65rem; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .5px; }
+  .bal-val { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; }
+  .bal-val.inc { color: var(--income); }
+  .bal-val.exp { color: var(--expense); }
+  .bal-val.tot { color: var(--text); }
+  .fake-rows { display: flex; flex-direction: column; gap: 10px; }
+  .fake-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px;
+    background: rgba(255,255,255,.03);
+    border-radius: 10px; border: 1px solid var(--border);
+  }
+  .fake-dot { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: .8rem; }
+  .fake-info { flex: 1; }
+  .fake-name { font-size: .82rem; font-weight: 600; }
+  .fake-tag { font-size: .68rem; color: var(--muted); }
+  .fake-amount { font-size: .9rem; font-weight: 700; font-family: 'Syne', sans-serif; }
+  .fake-amount.p { color: var(--income); }
+  .fake-amount.n { color: var(--expense); }
+  .animated-bar {
+    display: flex; height: 6px; border-radius: 100px;
+    overflow: hidden; margin-top: 16px;
+    gap: 2px;
+  }
+  .bar-seg {
+    height: 100%; border-radius: 100px;
+    animation: barGrow 1.5s ease forwards;
+    transform-origin: left;
+  }
+  @keyframes barGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 50px 0 40px;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem; font-weight: 800;
+    color: var(--teal); margin-bottom: 12px;
+  }
+  footer p { font-size: .85rem; color: var(--muted); font-weight: 300; }
+  .footer-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 24px;
+    color: var(--muted); text-decoration: none;
+    font-size: .85rem;
+    transition: color .2s;
+    border: 1px solid var(--border);
+    padding: 10px 20px; border-radius: 100px;
+  }
+  .footer-back:hover { color: var(--teal); border-color: rgba(0,184,148,.3); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp .8s ease forwards; }
+  .delay-1 { animation-delay: .1s; opacity: 0; }
+  .delay-2 { animation-delay: .25s; opacity: 0; }
+  .delay-3 { animation-delay: .4s; opacity: 0; }
+  .delay-4 { animation-delay: .55s; opacity: 0; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  .phone-stack { animation: float 4s ease-in-out infinite; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .wrap { padding: 0 20px; }
+    .hero-inner { grid-template-columns: 1fr; }
+    .phone-wrap { display: none; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .ss-grid { grid-template-columns: 1fr 1fr; }
+    .tech-grid { grid-template-columns: 1fr 1fr; }
+    .balance-showcase { grid-template-columns: 1fr; padding: 30px; }
+    .steps { grid-template-columns: 1fr; }
+    .steps::before { display: none; }
+    .stats-bar { flex-direction: column; }
+    .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+    .stat-item:last-child { border-bottom: none; }
+  }
+  @media (max-width: 600px) {
+    .features-grid { grid-template-columns: 1fr; }
+    .ss-grid { grid-template-columns: 1fr 1fr; }
+    .tech-grid { grid-template-columns: 1fr 1fr; }
+  }
 </style>
-
 </head>
+<body>
 
-<body class="text-white">
+<div class="grid-bg"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
 
-<div class="max-w-6xl mx-auto px-6 py-16">
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-logo">
+    <div class="logo-dot">💰</div>
+    BudgetBuddy
+  </div>
+  <div class="nav-tag">Android App</div>
+</nav>
 
-<h1 class="text-4xl font-bold mb-6 text-red-500">
-BudgetBuddy - Income & Expense Manager
-</h1>
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-label fade-up"><span></span>Finance Manager</div>
+        <h1 class="fade-up delay-1">
+          Smart Money.<br>
+          <span class="accent">Zero Stress.</span>
+        </h1>
+        <p class="hero-desc fade-up delay-2">
+          BudgetBuddy is your personal finance companion — track income, manage expenses, and understand your money with a clean, offline-first Android app.
+        </p>
+        <div class="hero-btns fade-up delay-3">
+          <a href="#screenshots" class="btn-primary">View Screenshots</a>
+          <a href="#tech" class="btn-ghost">Tech Stack →</a>
+        </div>
+      </div>
+      <div class="phone-wrap fade-up delay-4">
+        <div class="phone-glow"></div>
+        <div class="phone-stack">
+          <div class="phone-card">
+            <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/bss4.jpeg" alt="Transactions">
+          </div>
+          <div class="phone-card">
+            <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/bss3.jpeg" alt="Stats">
+          </div>
+          <div class="phone-card">
+            <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/bss2.jpeg" alt="Add Transaction">
+          </div>
+          <div class="phone-card">
+            <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/bss1.jpeg" alt="Categories">
+          </div>
+        </div>
+      </div>
+    </div>
 
-<p class="text-gray-300 mb-12 text-lg">
-
-BudgetBuddy is a smart and simple income and expense management Android application
-designed to help users track their daily financial activities بسهولة and efficiently.
-
-Instead of manually calculating or remembering expenses,
-this app allows users to record income and expenses in one place
-and clearly understand their financial situation.
-
-The goal of BudgetBuddy is to promote better financial habits,
-help users control spending, and make smarter financial decisions
-through a clean and user-friendly interface.
-
-</p>
-
-<!-- APP OVERVIEW -->
-
-<h2 class="text-2xl font-bold mb-6 text-red-400">
-App Overview
-</h2>
-
-<p class="text-gray-300 mb-10">
-
-BudgetBuddy works as a personal finance tracker where users can easily
-log their daily income and expenses.
-
-The app provides a simple dashboard showing financial summaries,
-helping users quickly understand where their money is going.
-
-With an intuitive design and smooth navigation,
-users can manage their budget without any complexity.
-
-</p>
-
+    <!-- STATS -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-num">6+</span>
+        <span class="stat-label">Transaction Categories</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">100%</span>
+        <span class="stat-label">Offline Functionality</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">Real‑Time</span>
+        <span class="stat-label">Balance Updates</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">SQLite</span>
+        <span class="stat-label">Local Data Storage</span>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- FEATURES -->
-
-<h2 class="text-2xl font-bold mb-6 text-red-400">
-Key Features
-</h2>
-
-<ul class="list-disc ml-6 text-gray-300 mb-12 space-y-3">
-
-<li>
-<strong>Income & Expense Tracking:</strong>
-Users can easily add and manage their daily income and expenses.
-</li>
-
-<li>
-<strong>Category Management:</strong>
-Expenses and income can be categorized for better financial analysis.
-</li>
-
-<li>
-<strong>Real-Time Balance:</strong>
-The app automatically calculates and shows the current balance.
-</li>
-
-<li>
-<strong>Simple Dashboard:</strong>
-Users can quickly view summaries of their financial activities.
-</li>
-
-<li>
-<strong>Offline Functionality:</strong>
-The app works completely offline using local storage.
-</li>
-
-<li>
-<strong>Lightweight & Fast:</strong>
-Optimized for performance to run smoothly on most Android devices.
-</li>
-
-</ul>
-
-
-<!-- HOW IT WORKS -->
-
-<h2 class="text-2xl font-bold mb-6 text-red-400">
-How the Application Works
-</h2>
-
-<p class="text-gray-300 mb-10">
-
-Users can add their income and expense records through a simple form.
-Each entry is stored locally and categorized properly.
-
-The app then processes this data and displays a summary,
-including total income, total expenses, and current balance.
-
-This allows users to monitor their financial habits and adjust spending accordingly.
-
-</p>
-
+<section class="features-section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-badge">✦ Features</span>
+      <h2>Everything You Need</h2>
+      <p>Powerful tools built for everyday money management</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon">📊</div>
+        <h3>Income & Expense Tracking</h3>
+        <p>Easily add and manage daily income and expenses with category tags and account types.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🗂️</div>
+        <h3>Smart Categories</h3>
+        <p>Organize transactions under Salary, Business, Investment, Rent, Loan, and Other.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">⚡</div>
+        <h3>Real-Time Balance</h3>
+        <p>Automatically calculates your current balance and updates it instantly on every entry.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🥧</div>
+        <h3>Visual Stats & Charts</h3>
+        <p>Pie chart breakdown of expenses and income by category for clear financial insight.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📴</div>
+        <h3>Fully Offline</h3>
+        <p>Works completely without internet. All data stored securely on your device using SQLite.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🏦</div>
+        <h3>Multi-Account Support</h3>
+        <p>Track transactions across Bank, Cash, PayTM, EasyPaisa, and other account types.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- SCREENSHOTS -->
+<section class="screenshots-section" id="screenshots">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-badge">✦ Screenshots</span>
+      <h2>See It In Action</h2>
+      <p>Clean, intuitive UI designed for everyday use</p>
+    </div>
+    <div class="ss-grid">
+      <div class="ss-card">
+        <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/bss4.jpeg" alt="Transaction List">
+        <span class="ss-label">Transaction List</span>
+      </div>
+      <div class="ss-card">
+        <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/bss3.jpeg" alt="Expense Stats">
+        <span class="ss-label">Expense Stats</span>
+      </div>
+      <div class="ss-card">
+        <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/bss2.jpeg" alt="Add Transaction">
+        <span class="ss-label">Add Transaction</span>
+      </div>
+      <div class="ss-card">
+        <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/bss1.jpeg" alt="Categories">
+        <span class="ss-label">Categories</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-<h2 class="text-2xl font-bold mb-6 text-red-400">
-App Screenshots
-</h2>
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-badge">✦ Workflow</span>
+      <h2>How It Works</h2>
+      <p>Three simple steps to financial clarity</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Add Transaction</h3>
+        <p>Enter income or expense, pick a category, select account type, add a note and date.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Auto-Categorize</h3>
+        <p>The app organizes each entry and stores it locally. No internet needed, ever.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>See Insights</h3>
+        <p>View your balance summary, daily/monthly breakdown, and visual pie charts instantly.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-14">
-
-<img class="rounded-lg img transition duration-300"
-src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/bss1.jpeg">
-
-<img class="rounded-lg img transition duration-300"
-src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/bss2.jpeg">
-
-<img class="rounded-lg img transition duration-300"
-src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/bss3.jpeg">
-
-<img class="rounded-lg img transition duration-300"
-src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/bss4.jpeg">
-
-</div>
-
-
-<!-- BENEFITS -->
-
-<h2 class="text-2xl font-bold mb-6 text-red-400">
-Why This App Is Useful
-</h2>
-
-<p class="text-gray-300 mb-12">
-
-Managing money is important, but many people struggle to keep track of their spending.
-
-BudgetBuddy simplifies this by giving users a clear overview of their finances.
-
-It helps users avoid overspending, save money, and build better financial discipline
-by providing accurate and easy-to-understand insights.
-
-</p>
-
-
-<!-- TECHNICAL IMPLEMENTATION -->
-
-<h2 class="text-2xl font-bold mb-6 text-red-400">
-Technical Implementation
-</h2>
-
-<p class="text-gray-300 mb-10">
-
-The application was developed using Java in Android Studio.
-
-All financial data is stored locally using SQLite,
-ensuring fast performance and offline functionality.
-
-The app focuses on simplicity, speed, and usability,
-making it accessible for all types of users.
-
-</p>
-
+<!-- LIVE UI SHOWCASE -->
+<section class="balance-section">
+  <div class="wrap">
+    <div class="balance-showcase">
+      <div class="balance-left">
+        <span class="section-badge">✦ Dashboard Preview</span>
+        <h2>Your Money,<br>At a Glance</h2>
+        <p>BudgetBuddy's dashboard gives you a complete picture of your finances — income vs expenses, categorized and clear, updated in real-time as you add entries.</p>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;">
+          <div>
+            <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Total Income</div>
+            <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--income);">+1,229,888</div>
+          </div>
+          <div>
+            <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Total Expense</div>
+            <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--expense);">−31,120</div>
+          </div>
+        </div>
+      </div>
+      <div class="fake-ui">
+        <div class="fake-header">
+          <span class="fake-title">Transactions</span>
+          <span class="fake-date">26 March, 2026</span>
+        </div>
+        <div class="balance-row">
+          <div class="bal-item">
+            <div class="bal-label">Income</div>
+            <div class="bal-val inc">+1229888</div>
+          </div>
+          <div class="bal-item">
+            <div class="bal-label">Expense</div>
+            <div class="bal-val exp">−31120</div>
+          </div>
+          <div class="bal-item">
+            <div class="bal-label">Total</div>
+            <div class="bal-val tot">1198768</div>
+          </div>
+        </div>
+        <div class="animated-bar">
+          <div class="bar-seg" style="flex:97.5;background:var(--income);animation-delay:.2s;"></div>
+          <div class="bar-seg" style="flex:2.5;background:var(--expense);animation-delay:.5s;"></div>
+        </div>
+        <div class="fake-rows" style="margin-top:16px;">
+          <div class="fake-row">
+            <div class="fake-dot" style="background:rgba(0,214,143,.15);">💰</div>
+            <div class="fake-info">
+              <div class="fake-name">Salary</div>
+              <div class="fake-tag">Bank · 26 Mar</div>
+            </div>
+            <div class="fake-amount p">+200,000</div>
+          </div>
+          <div class="fake-row">
+            <div class="fake-dot" style="background:rgba(255,71,87,.15);">🏷️</div>
+            <div class="fake-info">
+              <div class="fake-name">Rent</div>
+              <div class="fake-tag">EasyPaisa · 26 Mar</div>
+            </div>
+            <div class="fake-amount n">−15,000</div>
+          </div>
+          <div class="fake-row">
+            <div class="fake-dot" style="background:rgba(0,184,148,.15);">📈</div>
+            <div class="fake-info">
+              <div class="fake-name">Investment</div>
+              <div class="fake-tag">Bank · 26 Mar</div>
+            </div>
+            <div class="fake-amount p">+1,000,000</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- TECH STACK -->
+<section class="tech-section" id="tech">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-badge">✦ Built With</span>
+      <h2>Technology Stack</h2>
+      <p>Reliable, proven technologies for a fast native experience</p>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <span class="tech-icon">☕</span>
+        <h4>Java</h4>
+        <p>Core Android development language</p>
+      </div>
+      <div class="tech-card">
+        <span class="tech-icon">🤖</span>
+        <h4>Android Studio</h4>
+        <p>Full-featured IDE & development environment</p>
+      </div>
+      <div class="tech-card">
+        <span class="tech-icon">🗄️</span>
+        <h4>SQLite</h4>
+        <p>Local database for offline transaction storage</p>
+      </div>
+      <div class="tech-card">
+        <span class="tech-icon">📢</span>
+        <h4>AdMob</h4>
+        <p>Google monetization integration</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-<h2 class="text-2xl font-bold mb-6 text-red-400">
-Technology Stack
-</h2>
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="footer-logo">BudgetBuddy</div>
+    <p>A personal finance tracker built with Java & SQLite for Android</p>
+    <a href="index.html" class="footer-back">← Back to Portfolio</a>
+  </div>
+</footer>
 
-<ul class="list-disc ml-6 text-gray-300 mb-12 space-y-2">
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        e.target.style.transition = 'opacity .6s ease, transform .6s ease';
+      }
+    });
+  }, { threshold: 0.1 });
 
-<li><strong>Java</strong> – Core Android development language</li>
-<li><strong>Android Studio</strong> – Development environment</li>
-<li><strong>SQLite</strong> – Local database for storing transactions</li>
-<li><strong>AdMob Ads</strong> – Monetization integration</li>
-
-</ul>
-
-
-<div class="flex flex-wrap gap-4">
-
-<a
-href="index.html"
-class="bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg">
-
-Back to Portfolio
-
-</a>
-
-</div>
-
-</div>
+  document.querySelectorAll('.feat-card, .ss-card, .tech-card, .step').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    observer.observe(el);
+  });
+</script>
 
 </body>
 </html>
