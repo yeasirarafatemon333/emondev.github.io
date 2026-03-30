@@ -20,690 +20,295 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    overflow-x: hidden;
-  }
-
-  /* ── NOISE OVERLAY ── */
   body::before {
     content: '';
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 999;
-    opacity: 0.35;
+    pointer-events: none; z-index: 999; opacity: 0.35;
   }
 
-  /* ── HEADER ── */
   header {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
     padding: 18px 48px;
-    background: rgba(8,8,8,0.85);
-    backdrop-filter: blur(16px);
+    background: rgba(8,8,8,0.85); backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border);
   }
-
-  .logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
-    letter-spacing: 3px;
-    color: var(--red);
-  }
-
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 3px; color: var(--red); }
   .logo span { color: var(--text); }
-
   nav a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-left: 36px;
-    transition: color 0.2s;
+    color: var(--muted); text-decoration: none; font-size: 0.85rem;
+    font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase;
+    margin-left: 36px; transition: color 0.2s;
   }
   nav a:hover { color: var(--red); }
 
   /* ── HERO ── */
   .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 0 48px 80px;
-    position: relative;
-    overflow: hidden;
+    min-height: 100vh; display: flex; flex-direction: column;
+    justify-content: flex-end; padding: 0 48px 80px;
+    position: relative; overflow: hidden;
   }
-
   .hero-bg {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background:
       radial-gradient(ellipse 70% 60% at 80% 40%, rgba(255,26,26,0.12) 0%, transparent 65%),
       radial-gradient(ellipse 40% 40% at 10% 80%, rgba(255,26,26,0.07) 0%, transparent 60%),
       linear-gradient(160deg, #0d0d0d 0%, #080808 100%);
   }
-
-  /* animated ring */
   .hero-ring {
-    position: absolute;
-    top: 50%;
-    right: 8%;
-    transform: translateY(-50%);
-    width: 520px;
-    height: 520px;
-    border-radius: 50%;
+    position: absolute; top: 50%; right: 8%; transform: translateY(-50%);
+    width: 520px; height: 520px; border-radius: 50%;
     border: 1px solid rgba(255,26,26,0.12);
     animation: spin-slow 30s linear infinite;
   }
   .hero-ring::before {
-    content: '';
-    position: absolute;
-    inset: 30px;
-    border-radius: 50%;
+    content: ''; position: absolute; inset: 30px; border-radius: 50%;
     border: 1px solid rgba(255,26,26,0.08);
     animation: spin-slow 20s linear infinite reverse;
   }
   .hero-ring::after {
-    content: '';
-    position: absolute;
-    inset: 70px;
-    border-radius: 50%;
+    content: ''; position: absolute; inset: 70px; border-radius: 50%;
     border: 1px dashed rgba(255,26,26,0.06);
   }
-
   @keyframes spin-slow { to { transform: translateY(-50%) rotate(360deg); } }
 
-  /* phone mockup */
+  /* ── REAL PHONE MOCKUP ── */
   .phone-wrap {
-    position: absolute;
-    right: 10%;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 2;
+    position: absolute; right: 10%; top: 50%; transform: translateY(-50%); z-index: 2;
   }
-  .phone {
-    width: 200px;
-    height: 400px;
-    background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
-    border-radius: 32px;
-    border: 1.5px solid rgba(255,26,26,0.3);
-    box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 60px rgba(255,26,26,0.15);
-    position: relative;
+  .phone-frame {
+    width: 210px; height: 430px;
+    border-radius: 36px;
+    border: 2px solid rgba(255,26,26,0.35);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 60px rgba(255,26,26,0.15), inset 0 0 0 1px rgba(255,255,255,0.05);
     overflow: hidden;
     animation: float 4s ease-in-out infinite;
-  }
-  @keyframes float {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-16px); }
-  }
-  .phone-notch {
-    width: 60px; height: 12px;
+    position: relative;
     background: #000;
-    border-radius: 0 0 10px 10px;
-    margin: 0 auto;
-    position: relative; z-index: 2;
   }
-  .phone-screen {
-    padding: 8px 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
+  .phone-frame img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: top;
+    display: block;
   }
-  .phone-bar {
-    height: 8px;
-    border-radius: 4px;
-    background: rgba(255,26,26,0.7);
-    animation: pulse-bar 2s ease-in-out infinite;
+  /* top notch overlay */
+  .phone-frame::before {
+    content: '';
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 70px; height: 14px;
+    background: #000;
+    border-radius: 0 0 12px 12px;
+    z-index: 3;
   }
-  .phone-bar:nth-child(2) { width: 85%; background: rgba(255,255,255,0.15); animation-delay: 0.2s; }
-  .phone-bar:nth-child(3) { width: 60%; background: rgba(255,255,255,0.1); animation-delay: 0.4s; }
-  .phone-card-mini {
-    background: rgba(255,26,26,0.1);
-    border-radius: 8px;
-    height: 44px;
-    border: 1px solid rgba(255,26,26,0.2);
-    margin-top: 4px;
-    display: flex;
-    align-items: center;
-    padding: 0 8px;
-    gap: 8px;
-  }
-  .phone-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); }
-  .phone-lines { flex: 1; display: flex; flex-direction: column; gap: 4px; }
-  .phone-line { height: 5px; border-radius: 3px; background: rgba(255,255,255,0.15); }
-  .phone-line:last-child { width: 65%; }
-  @keyframes pulse-bar {
-    0%,100% { opacity: 0.7; }
-    50% { opacity: 1; }
-  }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
 
   .hero-content { position: relative; z-index: 3; max-width: 700px; }
 
   .hero-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--red);
-    border: 1px solid rgba(255,26,26,0.3);
-    padding: 6px 16px;
-    border-radius: 100px;
-    margin-bottom: 28px;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--red);
+    border: 1px solid rgba(255,26,26,0.3); padding: 6px 16px;
+    border-radius: 100px; margin-bottom: 28px;
     animation: fadeUp 0.8s ease both;
   }
   .hero-tag::before {
-    content: '';
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--red);
-    animation: blink 1.5s step-end infinite;
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--red); animation: blink 1.5s step-end infinite;
   }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
   .hero-title {
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(4rem, 8vw, 7rem);
-    line-height: 0.95;
-    letter-spacing: 2px;
-    margin-bottom: 28px;
+    line-height: 0.95; letter-spacing: 2px; margin-bottom: 28px;
     animation: fadeUp 0.8s 0.15s ease both;
   }
-  .hero-title em {
-    font-style: normal;
-    color: var(--red);
-    text-shadow: var(--glow);
-  }
+  .hero-title em { font-style: normal; color: var(--red); text-shadow: var(--glow); }
 
   .hero-desc {
-    font-size: 1.05rem;
-    color: var(--muted);
-    line-height: 1.75;
-    max-width: 520px;
-    margin-bottom: 40px;
-    font-weight: 300;
+    font-size: 1.05rem; color: var(--muted); line-height: 1.75;
+    max-width: 520px; margin-bottom: 40px; font-weight: 300;
     animation: fadeUp 0.8s 0.3s ease both;
   }
 
-  .hero-cta {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    animation: fadeUp 0.8s 0.45s ease both;
-  }
+  .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; animation: fadeUp 0.8s 0.45s ease both; }
 
   .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--red);
-    color: #fff;
-    font-weight: 600;
-    font-size: 0.9rem;
-    letter-spacing: 0.5px;
-    padding: 14px 32px;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: all 0.25s;
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--red); color: #fff; font-weight: 600; font-size: 0.9rem;
+    letter-spacing: 0.5px; padding: 14px 32px; border-radius: 8px;
+    text-decoration: none; transition: all 0.25s;
     box-shadow: 0 8px 32px rgba(255,26,26,0.35);
   }
-  .btn-primary:hover {
-    background: #ff3333;
-    transform: translateY(-2px);
-    box-shadow: 0 16px 48px rgba(255,26,26,0.55);
-  }
+  .btn-primary:hover { background: #ff3333; transform: translateY(-2px); box-shadow: 0 16px 48px rgba(255,26,26,0.55); }
 
   .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: transparent;
-    color: var(--text);
-    font-weight: 500;
-    font-size: 0.9rem;
-    padding: 14px 32px;
-    border-radius: 8px;
-    text-decoration: none;
-    border: 1px solid rgba(255,255,255,0.12);
-    transition: all 0.25s;
+    display: inline-flex; align-items: center; gap: 10px;
+    background: transparent; color: var(--text); font-weight: 500; font-size: 0.9rem;
+    padding: 14px 32px; border-radius: 8px; text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.12); transition: all 0.25s;
   }
-  .btn-secondary:hover {
-    border-color: rgba(255,26,26,0.4);
-    color: var(--red);
-  }
+  .btn-secondary:hover { border-color: rgba(255,26,26,0.4); color: var(--red); }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* ── STATS STRIP ── */
+  .scroll-indicator {
+    position: absolute; bottom: 40px; left: 48px;
+    display: flex; align-items: center; gap: 12px;
+    color: var(--muted); font-size: 0.75rem; letter-spacing: 2px;
+    text-transform: uppercase; z-index: 3;
+    animation: fadeUp 1s 0.8s ease both;
+  }
+  .scroll-line { width: 40px; height: 1px; background: var(--muted); position: relative; overflow: hidden; }
+  .scroll-line::after {
+    content: ''; position: absolute; inset: 0; background: var(--red);
+    animation: scan 1.5s ease-in-out infinite;
+  }
+  @keyframes scan { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+
+  /* ── STATS ── */
   .stats {
-    background: var(--card);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: center;
-    gap: 0;
-    overflow: hidden;
+    background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    display: flex; justify-content: center;
   }
   .stat {
-    flex: 1;
-    max-width: 280px;
-    padding: 40px 32px;
-    text-align: center;
-    border-right: 1px solid var(--border);
-    position: relative;
-    transition: background 0.3s;
+    flex: 1; max-width: 280px; padding: 40px 32px; text-align: center;
+    border-right: 1px solid var(--border); transition: background 0.3s;
   }
   .stat:last-child { border-right: none; }
   .stat:hover { background: rgba(255,26,26,0.04); }
-  .stat-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 3.2rem;
-    color: var(--red);
-    letter-spacing: 2px;
-    line-height: 1;
-  }
-  .stat-label {
-    font-size: 0.78rem;
-    color: var(--muted);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-top: 8px;
-    font-weight: 500;
-  }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 3.2rem; color: var(--red); letter-spacing: 2px; line-height: 1; }
+  .stat-label { font-size: 0.78rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 8px; font-weight: 500; }
 
-  /* ── SECTION WRAPPER ── */
-  .section {
-    padding: 100px 48px;
-    max-width: 1200px;
-    margin: 0 auto;
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 18px 0; background: rgba(255,26,26,0.03);
   }
+  .marquee-track { display: flex; animation: marquee 25s linear infinite; width: max-content; }
+  .marquee-item {
+    display: flex; align-items: center; gap: 16px; padding: 0 40px;
+    font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted); font-weight: 500; white-space: nowrap;
+  }
+  .marquee-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
+  /* ── SECTION ── */
+  .section { padding: 100px 48px; max-width: 1200px; margin: 0 auto; }
   .section-label {
-    font-size: 0.72rem;
-    color: var(--red);
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    font-weight: 600;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    font-size: 0.72rem; color: var(--red); letter-spacing: 4px; text-transform: uppercase;
+    font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;
   }
-  .section-label::before {
-    content: '';
-    display: block;
-    width: 28px;
-    height: 2px;
-    background: var(--red);
-  }
+  .section-label::before { content: ''; display: block; width: 28px; height: 2px; background: var(--red); }
+  .section-title { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
+  .section-sub { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 580px; font-weight: 300; margin-bottom: 60px; }
 
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 800;
-    line-height: 1.15;
-    margin-bottom: 16px;
-  }
-
-  .section-sub {
-    color: var(--muted);
-    font-size: 1rem;
-    line-height: 1.7;
-    max-width: 580px;
-    font-weight: 300;
-    margin-bottom: 60px;
-  }
-
-  /* ── FEATURES GRID ── */
+  /* ── FEATURES ── */
   .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px; background: var(--border); border: 1px solid var(--border);
+    border-radius: 16px; overflow: hidden;
   }
-
   .feature-card {
-    background: var(--card);
-    padding: 36px 32px;
-    position: relative;
-    transition: background 0.3s;
-    overflow: hidden;
+    background: var(--card); padding: 36px 32px; position: relative;
+    transition: background 0.3s; overflow: hidden;
   }
-
   .feature-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
     background: linear-gradient(90deg, transparent, var(--red), transparent);
-    transform: scaleX(0);
-    transition: transform 0.4s ease;
+    transform: scaleX(0); transition: transform 0.4s ease;
   }
   .feature-card:hover::before { transform: scaleX(1); }
   .feature-card:hover { background: #141414; }
-
   .feature-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    background: rgba(255,26,26,0.1);
-    border: 1px solid rgba(255,26,26,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-    font-size: 1.3rem;
-    transition: all 0.3s;
+    width: 48px; height: 48px; border-radius: 12px;
+    background: rgba(255,26,26,0.1); border: 1px solid rgba(255,26,26,0.2);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px; font-size: 1.3rem; transition: all 0.3s;
   }
-  .feature-card:hover .feature-icon {
-    background: rgba(255,26,26,0.2);
-    box-shadow: 0 0 20px rgba(255,26,26,0.2);
-  }
+  .feature-card:hover .feature-icon { background: rgba(255,26,26,0.2); box-shadow: 0 0 20px rgba(255,26,26,0.2); }
+  .feature-title { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
+  .feature-desc { color: var(--muted); font-size: 0.88rem; line-height: 1.65; font-weight: 300; }
 
-  .feature-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.05rem;
-    font-weight: 700;
-    margin-bottom: 10px;
+  /* ── STEPS ── */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 32px; }
+  .step {
+    position: relative; padding: 32px; background: var(--card);
+    border-radius: 16px; border: 1px solid var(--border);
+    transition: all 0.3s; overflow: hidden;
   }
-
-  .feature-desc {
-    color: var(--muted);
-    font-size: 0.88rem;
-    line-height: 1.65;
-    font-weight: 300;
-  }
+  .step:hover { border-color: rgba(255,26,26,0.4); transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,26,26,0.15); }
+  .step-num { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: rgba(255,26,26,0.1); position: absolute; top: 12px; right: 20px; line-height: 1; letter-spacing: 2px; }
+  .step-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 10px; position: relative; z-index: 1; }
+  .step-desc { color: var(--muted); font-size: 0.875rem; line-height: 1.65; position: relative; z-index: 1; }
+  .step-icon { font-size: 1.6rem; margin-bottom: 16px; display: block; }
 
   /* ── SCREENSHOTS ── */
-  .screenshots-wrap {
-    position: relative;
-    overflow: hidden;
-    padding: 20px 0 40px;
-  }
-
+  .screenshots-wrap { position: relative; overflow: hidden; padding: 20px 0 40px; }
   .screenshots-track {
-    display: flex;
-    gap: 20px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 16px;
-    scrollbar-width: thin;
-    scrollbar-color: var(--red) transparent;
+    display: flex; gap: 20px; overflow-x: auto;
+    scroll-snap-type: x mandatory; padding-bottom: 16px;
+    scrollbar-width: thin; scrollbar-color: var(--red) transparent;
   }
   .screenshots-track::-webkit-scrollbar { height: 3px; }
-  .screenshots-track::-webkit-scrollbar-track { background: transparent; }
   .screenshots-track::-webkit-scrollbar-thumb { background: var(--red); border-radius: 2px; }
-
   .ss-card {
-    flex: 0 0 220px;
-    scroll-snap-align: start;
-    border-radius: 20px;
-    overflow: hidden;
-    border: 1px solid rgba(255,26,26,0.2);
-    position: relative;
-    cursor: pointer;
+    flex: 0 0 220px; scroll-snap-align: start; border-radius: 20px; overflow: hidden;
+    border: 1px solid rgba(255,26,26,0.2); position: relative; cursor: pointer;
     transition: all 0.35s ease;
   }
   .ss-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
+    content: ''; position: absolute; inset: 0;
     background: linear-gradient(to top, rgba(255,26,26,0.4) 0%, transparent 50%);
-    opacity: 0;
-    transition: opacity 0.35s;
+    opacity: 0; transition: opacity 0.35s;
   }
-  .ss-card:hover {
-    transform: scale(1.04) translateY(-6px);
-    box-shadow: 0 20px 60px rgba(255,26,26,0.3), 0 0 0 1px rgba(255,26,26,0.4);
-  }
+  .ss-card:hover { transform: scale(1.04) translateY(-6px); box-shadow: 0 20px 60px rgba(255,26,26,0.3), 0 0 0 1px rgba(255,26,26,0.4); }
   .ss-card:hover::after { opacity: 1; }
-
-  .ss-card img {
-    width: 100%;
-    display: block;
-    transition: transform 0.35s;
-  }
+  .ss-card img { width: 100%; display: block; transition: transform 0.35s; }
   .ss-card:hover img { transform: scale(1.05); }
 
-  /* ── TECH STACK ── */
-  .tech-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 40px;
-  }
+  /* ── TECH ── */
+  .tech-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
   .tech-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    transition: all 0.25s;
-    cursor: default;
+    display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 100px;
+    font-size: 0.85rem; font-weight: 500; transition: all 0.25s; cursor: default;
   }
-  .tech-badge:hover {
-    border-color: rgba(255,26,26,0.5);
-    color: var(--red);
-    background: rgba(255,26,26,0.05);
-    transform: translateY(-2px);
-  }
+  .tech-badge:hover { border-color: rgba(255,26,26,0.5); color: var(--red); background: rgba(255,26,26,0.05); transform: translateY(-2px); }
   .tech-badge span { color: var(--red); font-size: 1rem; }
-
-  /* ── HOW IT WORKS ── */
-  .steps {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 32px;
-    counter-reset: steps;
-  }
-
-  .step {
-    position: relative;
-    padding: 32px;
-    background: var(--card);
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    counter-increment: steps;
-    transition: all 0.3s;
-    overflow: hidden;
-  }
-  .step:hover {
-    border-color: rgba(255,26,26,0.4);
-    transform: translateY(-4px);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,26,26,0.15);
-  }
-  .step-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 4rem;
-    color: rgba(255,26,26,0.1);
-    position: absolute;
-    top: 12px;
-    right: 20px;
-    line-height: 1;
-    letter-spacing: 2px;
-  }
-  .step-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-    position: relative;
-    z-index: 1;
-  }
-  .step-desc {
-    color: var(--muted);
-    font-size: 0.875rem;
-    line-height: 1.65;
-    position: relative; z-index: 1;
-  }
-  .step-icon {
-    font-size: 1.6rem;
-    margin-bottom: 16px;
-    display: block;
-  }
 
   /* ── CTA ── */
   .cta-section {
     background: linear-gradient(135deg, #0f0303 0%, #180505 50%, #0d0d0d 100%);
-    border: 1px solid rgba(255,26,26,0.2);
-    border-radius: 24px;
-    padding: 80px 64px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    margin: 0 48px 80px;
+    border: 1px solid rgba(255,26,26,0.2); border-radius: 24px;
+    padding: 80px 64px; text-align: center; position: relative;
+    overflow: hidden; margin: 0 48px 80px;
   }
   .cta-section::before {
-    content: '';
-    position: absolute;
-    top: -100px; left: 50%;
-    transform: translateX(-50%);
+    content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
     width: 500px; height: 300px;
     background: radial-gradient(ellipse, rgba(255,26,26,0.2) 0%, transparent 70%);
   }
-  .cta-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(3rem, 6vw, 5.5rem);
-    letter-spacing: 3px;
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 1;
-  }
+  .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 6vw, 5.5rem); letter-spacing: 3px; margin-bottom: 20px; position: relative; z-index: 1; }
   .cta-title em { font-style: normal; color: var(--red); }
-  .cta-sub {
-    color: var(--muted);
-    font-size: 1rem;
-    margin-bottom: 40px;
-    position: relative; z-index: 1;
-    font-weight: 300;
-  }
+  .cta-sub { color: var(--muted); font-size: 1rem; margin-bottom: 40px; position: relative; z-index: 1; font-weight: 300; }
 
-  /* ── FOOTER ── */
   footer {
-    border-top: 1px solid var(--border);
-    padding: 32px 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: gap;
-    gap: 16px;
+    border-top: 1px solid var(--border); padding: 32px 48px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
   }
-  .footer-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 3px;
-    color: var(--red);
-  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 3px; color: var(--red); }
   .footer-logo span { color: var(--muted); }
   .footer-links { display: flex; gap: 24px; }
-  .footer-links a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: color 0.2s;
-  }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
   .footer-links a:hover { color: var(--red); }
 
-  /* ── MARQUEE ── */
-  .marquee-wrap {
-    overflow: hidden;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 18px 0;
-    background: rgba(255,26,26,0.03);
-    position: relative;
-  }
-  .marquee-track {
-    display: flex;
-    gap: 0;
-    animation: marquee 25s linear infinite;
-    width: max-content;
-  }
-  .marquee-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 0 40px;
-    font-size: 0.8rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    font-weight: 500;
-    white-space: nowrap;
-  }
-  .marquee-dot {
-    width: 4px; height: 4px;
-    border-radius: 50%;
-    background: var(--red);
-    flex-shrink: 0;
-  }
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-
-  /* ── SCROLL INDICATOR ── */
-  .scroll-indicator {
-    position: absolute;
-    bottom: 40px;
-    left: 48px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: var(--muted);
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    z-index: 3;
-    animation: fadeUp 1s 0.8s ease both;
-  }
-  .scroll-line {
-    width: 40px;
-    height: 1px;
-    background: var(--muted);
-    position: relative;
-    overflow: hidden;
-  }
-  .scroll-line::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--red);
-    animation: scan 1.5s ease-in-out infinite;
-  }
-  @keyframes scan {
-    from { transform: translateX(-100%); }
-    to { transform: translateX(100%); }
-  }
-
-  /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
     header { padding: 16px 24px; }
     nav { display: none; }
@@ -720,7 +325,6 @@
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
   <div class="logo">NEWS<span>HUB</span></div>
   <nav>
@@ -731,42 +335,14 @@
   </nav>
 </header>
 
-
-<!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-ring"></div>
 
-  <!-- phone mockup -->
+  <!-- REAL SCREENSHOT PHONE -->
   <div class="phone-wrap">
-    <div class="phone">
-      <div class="phone-notch"></div>
-      <div class="phone-screen">
-        <div class="phone-bar"></div>
-        <div class="phone-bar"></div>
-        <div class="phone-bar"></div>
-        <div class="phone-card-mini">
-          <div class="phone-dot"></div>
-          <div class="phone-lines">
-            <div class="phone-line"></div>
-            <div class="phone-line"></div>
-          </div>
-        </div>
-        <div class="phone-card-mini" style="opacity:0.7">
-          <div class="phone-dot" style="background:rgba(255,255,255,0.3)"></div>
-          <div class="phone-lines">
-            <div class="phone-line"></div>
-            <div class="phone-line"></div>
-          </div>
-        </div>
-        <div class="phone-card-mini" style="opacity:0.5">
-          <div class="phone-dot" style="background:rgba(255,255,255,0.2)"></div>
-          <div class="phone-lines">
-            <div class="phone-line"></div>
-            <div class="phone-line"></div>
-          </div>
-        </div>
-      </div>
+    <div class="phone-frame">
+      <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/ss1.jpeg" alt="App Screenshot">
     </div>
   </div>
 
@@ -785,37 +361,19 @@
       Bringing Bangladesh's top TV channels and news portals into a single, beautifully designed platform. Read fast. Stay informed.
     </p>
     <div class="hero-cta">
-      <a href="https://play.google.com/store/apps/details?id=com.artechandsoftltd.newsbangla" target="_blank" class="btn-primary">
-        ▶ &nbsp;View on Play Store
-      </a>
+      <a href="https://play.google.com/store/apps/details?id=com.artechandsoftltd.newsbangla" target="_blank" class="btn-primary">▶ &nbsp;View on Play Store</a>
       <a href="#features" class="btn-secondary">Explore Features →</a>
     </div>
   </div>
 </section>
 
-
-<!-- STATS -->
 <div class="stats">
-  <div class="stat">
-    <div class="stat-num">10+</div>
-    <div class="stat-label">News Sources</div>
-  </div>
-  <div class="stat">
-    <div class="stat-num">1</div>
-    <div class="stat-label">Unified Platform</div>
-  </div>
-  <div class="stat">
-    <div class="stat-num">100%</div>
-    <div class="stat-label">Free to Use</div>
-  </div>
-  <div class="stat">
-    <div class="stat-num">24/7</div>
-    <div class="stat-label">Live Updates</div>
-  </div>
+  <div class="stat"><div class="stat-num">10+</div><div class="stat-label">News Sources</div></div>
+  <div class="stat"><div class="stat-num">1</div><div class="stat-label">Unified Platform</div></div>
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Free to Use</div></div>
+  <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Live Updates</div></div>
 </div>
 
-
-<!-- MARQUEE -->
 <div class="marquee-wrap">
   <div class="marquee-track">
     <div class="marquee-item"><div class="marquee-dot"></div>Politics</div>
@@ -837,108 +395,49 @@
   </div>
 </div>
 
-
-<!-- FEATURES -->
 <div id="features" class="section">
   <div class="section-label">What's Inside</div>
   <h2 class="section-title">Packed With Features</h2>
   <p class="section-sub">Everything you need to stay informed — designed to be fast, light, and effortless.</p>
-
   <div class="features-grid">
-    <div class="feature-card">
-      <div class="feature-icon">📡</div>
-      <div class="feature-title">Multiple News Sources</div>
-      <div class="feature-desc">Aggregates top Bangladeshi TV channels and online portals into a single unified feed.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">⚡</div>
-      <div class="feature-title">Lightning Fast</div>
-      <div class="feature-desc">Optimized for speed — minimal loading times and smooth navigation between sources.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🎯</div>
-      <div class="feature-title">User-Friendly UI</div>
-      <div class="feature-desc">Clean, minimal design that anyone can use instantly without any learning curve.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🔄</div>
-      <div class="feature-title">Regular Updates</div>
-      <div class="feature-desc">Always the latest news — content pulled live from online sources around the clock.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">📱</div>
-      <div class="feature-title">Lightweight App</div>
-      <div class="feature-desc">Runs efficiently on all Android devices without heavy storage or memory demands.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🌐</div>
-      <div class="feature-title">Centralized Hub</div>
-      <div class="feature-desc">No more switching between apps or websites — everything lives in one place.</div>
-    </div>
+    <div class="feature-card"><div class="feature-icon">📡</div><div class="feature-title">Multiple News Sources</div><div class="feature-desc">Aggregates top Bangladeshi TV channels and online portals into a single unified feed.</div></div>
+    <div class="feature-card"><div class="feature-icon">⚡</div><div class="feature-title">Lightning Fast</div><div class="feature-desc">Optimized for speed — minimal loading times and smooth navigation between sources.</div></div>
+    <div class="feature-card"><div class="feature-icon">🎯</div><div class="feature-title">User-Friendly UI</div><div class="feature-desc">Clean, minimal design that anyone can use instantly without any learning curve.</div></div>
+    <div class="feature-card"><div class="feature-icon">🔄</div><div class="feature-title">Regular Updates</div><div class="feature-desc">Always the latest news — content pulled live from online sources around the clock.</div></div>
+    <div class="feature-card"><div class="feature-icon">📱</div><div class="feature-title">Lightweight App</div><div class="feature-desc">Runs efficiently on all Android devices without heavy storage or memory demands.</div></div>
+    <div class="feature-card"><div class="feature-icon">🌐</div><div class="feature-title">Centralized Hub</div><div class="feature-desc">No more switching between apps or websites — everything lives in one place.</div></div>
   </div>
 </div>
 
-
-<!-- HOW IT WORKS -->
-<div class="section" style="padding-top: 0;">
+<div class="section" style="padding-top:0;">
   <div class="section-label">Process</div>
   <h2 class="section-title">How It Works</h2>
   <p class="section-sub">Three simple steps to stay ahead of every story.</p>
-
   <div class="steps">
-    <div class="step">
-      <div class="step-num">01</div>
-      <span class="step-icon">📲</span>
-      <div class="step-title">Open the App</div>
-      <div class="step-desc">Launch News Hub and get an instant overview of all available news sources.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">02</div>
-      <span class="step-icon">🗞️</span>
-      <div class="step-title">Pick a Source</div>
-      <div class="step-desc">Select from popular Bangladeshi TV channels and online news portals.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">03</div>
-      <span class="step-icon">📖</span>
-      <div class="step-title">Read & Stay Updated</div>
-      <div class="step-desc">Browse the latest headlines and news in a clean, distraction-free interface.</div>
-    </div>
+    <div class="step"><div class="step-num">01</div><span class="step-icon">📲</span><div class="step-title">Open the App</div><div class="step-desc">Launch News Hub and get an instant overview of all available news sources.</div></div>
+    <div class="step"><div class="step-num">02</div><span class="step-icon">🗞️</span><div class="step-title">Pick a Source</div><div class="step-desc">Select from popular Bangladeshi TV channels and online news portals.</div></div>
+    <div class="step"><div class="step-num">03</div><span class="step-icon">📖</span><div class="step-title">Read & Stay Updated</div><div class="step-desc">Browse the latest headlines and news in a clean, distraction-free interface.</div></div>
   </div>
 </div>
 
-
-<!-- SCREENSHOTS -->
 <div id="screenshots" class="section" style="padding-top:0;">
   <div class="section-label">Preview</div>
   <h2 class="section-title">App Screenshots</h2>
   <p class="section-sub">A look inside the clean, modern interface.</p>
-
   <div class="screenshots-wrap">
     <div class="screenshots-track">
-      <div class="ss-card">
-        <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/ss1.jpeg" alt="Screenshot 1" loading="lazy">
-      </div>
-      <div class="ss-card">
-        <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/ss2.jpeg" alt="Screenshot 2" loading="lazy">
-      </div>
-      <div class="ss-card">
-        <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/ss3.jpeg" alt="Screenshot 3" loading="lazy">
-      </div>
-      <div class="ss-card">
-        <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/ss4.jpeg" alt="Screenshot 4" loading="lazy">
-      </div>
+      <div class="ss-card"><img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/ss1.jpeg" alt="Screenshot 1" loading="lazy"></div>
+      <div class="ss-card"><img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/ss2.jpeg" alt="Screenshot 2" loading="lazy"></div>
+      <div class="ss-card"><img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/ss3.jpeg" alt="Screenshot 3" loading="lazy"></div>
+      <div class="ss-card"><img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/ss4.jpeg" alt="Screenshot 4" loading="lazy"></div>
     </div>
   </div>
 </div>
 
-
-<!-- TECH STACK -->
 <div id="tech" class="section" style="padding-top:0;">
   <div class="section-label">Built With</div>
   <h2 class="section-title">Technology Stack</h2>
   <p class="section-sub">Solid, proven technologies powering every feature under the hood.</p>
-
   <div class="tech-list">
     <div class="tech-badge"><span>☕</span> Java</div>
     <div class="tech-badge"><span>🤖</span> Android Studio</div>
@@ -947,18 +446,12 @@
   </div>
 </div>
 
-
-<!-- CTA -->
 <div class="cta-section">
   <h2 class="cta-title">READY TO<br><em>STAY INFORMED?</em></h2>
   <p class="cta-sub">Download the app and get all of Bangladesh's top news in one place — for free.</p>
-  <a href="https://play.google.com/store/apps/details?id=com.artechandsoftltd.newsbangla" target="_blank" class="btn-primary" style="display:inline-flex; font-size:1rem; padding:16px 40px;">
-    ▶ &nbsp;Download on Play Store
-  </a>
+  <a href="https://play.google.com/store/apps/details?id=com.artechandsoftltd.newsbangla" target="_blank" class="btn-primary" style="display:inline-flex;font-size:1rem;padding:16px 40px;">▶ &nbsp;Download on Play Store</a>
 </div>
 
-
-<!-- FOOTER -->
 <footer>
   <div class="footer-logo">NEWS<span>HUB</span></div>
   <div class="footer-links">
@@ -967,7 +460,6 @@
   </div>
 </footer>
 
-<!-- Scroll-based fade-in animation -->
 <script>
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(el => {
@@ -985,6 +477,5 @@
     observer.observe(el);
   });
 </script>
-
 </body>
 </html>
