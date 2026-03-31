@@ -109,6 +109,18 @@ nav{position:fixed;top:0;width:100%;z-index:200;height:64px;display:flex;align-i
 .hstat .sv{font-family:'Anton',sans-serif;font-size:1.6rem;color:var(--red);line-height:1}
 .hstat .sl{font-family:'IBM Plex Mono',monospace;font-size:0.5rem;letter-spacing:0.1em;color:var(--dim);text-transform:uppercase;margin-top:0.2rem}
 
+/* MOBILE AVATAR — shown only on mobile */
+.hero-avatar-mobile{display:none;position:relative;width:100%;max-width:300px;margin:0 auto 2rem}
+.hero-avatar-mobile .avatar-frame{width:100%;height:320px}
+.hero-avatar-mobile .avatar-frame img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:grayscale(20%) contrast(1.1)}
+
+/* mobile stats strip */
+.hero-stats-mobile{display:none;justify-content:center;gap:0;margin-bottom:2rem}
+.hstat-m{background:var(--panel);border:1px solid var(--border-r);padding:0.8rem 1.2rem;text-align:center;position:relative;flex:1;max-width:90px}
+.hstat-m::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--red)}
+.hstat-m .sv{font-family:'Anton',sans-serif;font-size:1.4rem;color:var(--red);line-height:1}
+.hstat-m .sl{font-family:'IBM Plex Mono',monospace;font-size:0.45rem;letter-spacing:0.1em;color:var(--dim);text-transform:uppercase;margin-top:0.2rem}
+
 .scroll-down{position:absolute;bottom:2rem;left:3rem;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:0.5rem}
 .scroll-down span{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;color:var(--dim);text-transform:uppercase}
 .sa{width:1px;height:10px;background:var(--red);animation:safall .8s ease-in-out infinite}
@@ -197,8 +209,17 @@ section.sec{position:relative;z-index:2}
 .ctag{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;border:1px solid var(--border-d);color:var(--dim);padding:0.3rem 0.8rem;text-transform:uppercase;transition:all .2s;clip-path:polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%)}
 .ctag:hover{border-color:var(--gold);color:var(--gold)}
 
-/* PROJECTS */
-.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border-d);border:1px solid var(--border-d)}
+/* ==============================
+   PROJECTS — unified 2×2 grid
+   ============================== */
+.proj-grid-unified {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--border-d);
+  border: 1px solid var(--border-d);
+}
+
 .proj-card{background:var(--panel);overflow:hidden;display:flex;flex-direction:column;transition:background .3s;position:relative}
 .proj-card:hover{background:var(--card)}
 .proj-img{height:200px;overflow:hidden;position:relative}
@@ -207,35 +228,31 @@ section.sec{position:relative;z-index:2}
 .proj-img-over{position:absolute;inset:0;background:linear-gradient(to top,var(--panel) 0%,rgba(14,8,14,0.5) 50%,transparent 100%)}
 .proj-num-tag{position:absolute;top:1rem;left:1rem;z-index:2;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;background:rgba(232,25,44,0.8);color:#fff;padding:0.2rem 0.6rem;text-transform:uppercase}
 
-/* GAME PROJECT CARD — special gold accent */
-.proj-card.proj-game{background:linear-gradient(135deg,var(--panel) 0%,#140e08 100%)}
-.proj-card.proj-game:hover{background:linear-gradient(135deg,var(--card) 0%,#1c1208 100%)}
-.proj-card.proj-game .proj-num-tag{background:rgba(212,160,23,0.85);}
-.proj-card.proj-game .proj-link{color:var(--gold)}
-.proj-card.proj-game .proj-link:hover{color:var(--red)}
-.proj-card.proj-game .proj-img img{filter:grayscale(15%) contrast(1.15) saturate(1.1);}
-.proj-card.proj-game:hover .proj-img img{filter:grayscale(0%) contrast(1.15) saturate(1.2);}
-.proj-card.proj-game .proj-img-over{background:linear-gradient(to top,#140e08 0%,rgba(20,14,8,0.5) 50%,transparent 100%)}
-.game-live-badge{display:inline-flex;align-items:center;gap:0.4rem;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(212,160,23,0.3);background:rgba(212,160,23,0.07);padding:0.22rem 0.7rem;margin-bottom:0.6rem}
-.game-live-badge::before{content:'';width:5px;height:5px;background:var(--gold);border-radius:50%;box-shadow:0 0 6px var(--gold);animation:blink .8s step-end infinite}
-/* spans full width on bottom row */
-.proj-grid-4 { grid-template-columns: repeat(3, 1fr); }
-.proj-grid-4 .proj-card:nth-child(4) {
-  grid-column: 1 / -1;
-}
-.proj-card.proj-game .proj-img{height:260px;}
-.proj-card.proj-game .proj-img-stack{display:grid;grid-template-columns:1fr 1fr 1fr;height:100%;gap:1px}
-.proj-card.proj-game .proj-img-stack img{width:100%;height:100%;object-fit:cover;filter:grayscale(15%) contrast(1.1);transition:transform .5s,filter .5s}
-.proj-card.proj-game:hover .proj-img-stack img{transform:scale(1.04);filter:grayscale(0%) contrast(1.1) saturate(1.2)}
-
 .proj-body{padding:1.5rem 2rem 2rem;flex:1;display:flex;flex-direction:column}
 .proj-title{font-family:'Anton',sans-serif;font-size:1.3rem;letter-spacing:0.04em;color:var(--white);margin-bottom:0.6rem;line-height:1.1}
 .proj-desc{font-size:0.88rem;font-weight:300;color:var(--dim);line-height:1.7;flex:1;margin-bottom:1.2rem}
-.proj-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border-d);padding-top:1rem}
+.proj-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border-d);padding-top:1rem;gap:0.5rem;flex-wrap:wrap}
 .proj-stack{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--dim2);letter-spacing:0.1em;text-transform:uppercase}
-.proj-link{font-family:'Barlow Condensed',sans-serif;font-size:0.85rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);text-decoration:none;display:flex;align-items:center;gap:0.4rem;transition:gap .2s,color .2s}
+.proj-link{font-family:'Barlow Condensed',sans-serif;font-size:0.85rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);text-decoration:none;display:flex;align-items:center;gap:0.4rem;transition:gap .2s,color .2s;white-space:nowrap}
 .proj-link:hover{gap:0.8rem;color:var(--gold)}
 .proj-link::after{content:'→'}
+
+/* GAME card (project 4) — gold accent */
+.proj-card.proj-game{background:linear-gradient(135deg,var(--panel) 0%,#140e08 100%)}
+.proj-card.proj-game:hover{background:linear-gradient(135deg,var(--card) 0%,#1c1208 100%)}
+.proj-card.proj-game .proj-num-tag{background:rgba(212,160,23,0.85)}
+.proj-card.proj-game .proj-img img{filter:grayscale(15%) contrast(1.15) saturate(1.1)}
+.proj-card.proj-game:hover .proj-img img{filter:grayscale(0%) contrast(1.15) saturate(1.2)}
+.proj-card.proj-game .proj-img-over{background:linear-gradient(to top,#140e08 0%,rgba(20,14,8,0.5) 50%,transparent 100%)}
+.proj-card.proj-game .proj-img{height:200px}
+
+/* image stack for game card */
+.proj-img-stack{display:grid;grid-template-columns:1fr 1fr 1fr;height:100%;gap:1px}
+.proj-img-stack img{width:100%;height:100%;object-fit:cover;filter:grayscale(15%) contrast(1.1);transition:transform .5s,filter .5s}
+.proj-card.proj-game:hover .proj-img-stack img{transform:scale(1.04);filter:grayscale(0%) contrast(1.1) saturate(1.2)}
+
+.game-live-badge{display:inline-flex;align-items:center;gap:0.4rem;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(212,160,23,0.3);background:rgba(212,160,23,0.07);padding:0.22rem 0.7rem;margin-bottom:0.6rem}
+.game-live-badge::before{content:'';width:5px;height:5px;background:var(--gold);border-radius:50%;box-shadow:0 0 6px var(--gold);animation:blink .8s step-end infinite}
 
 /* CONTACT */
 .contact-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:4rem;align-items:start}
@@ -279,30 +296,44 @@ footer p{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--red)}
 
+/* ==============================
+   RESPONSIVE
+   ============================== */
 @media (max-width:1100px){
   .hero-inner{grid-template-columns:1fr;padding:0 1.5rem 0 3rem}
+  /* Hide desktop avatar panel on tablet/mobile */
   .hero-avatar-panel{display:none}
   .hero-stats-bar{display:none}
+  /* Show mobile avatar */
+  .hero-avatar-mobile{display:block}
+  .hero-stats-mobile{display:flex}
   .about-grid{grid-template-columns:1fr;gap:3rem}
   .skills-grid{grid-template-columns:repeat(2,1fr)}
-  .proj-grid{grid-template-columns:1fr 1fr}
-  .proj-grid-4{grid-template-columns:1fr 1fr}
-  .proj-grid-4 .proj-card:nth-child(4){grid-column:auto}
   .contact-grid{grid-template-columns:1fr}
 }
+
 @media (max-width:700px){
   nav{padding:0 1.5rem}
   .nav-links{display:none}
   .wrap{padding:0 1.5rem}
   .skills-grid{grid-template-columns:1fr}
-  .proj-grid{grid-template-columns:1fr}
-  .proj-grid-4{grid-template-columns:1fr}
-  .proj-grid-4 .proj-card:nth-child(4){grid-column:auto}
-  .mini-stats{grid-template-columns:1fr}
+  /* Projects: 1 column on mobile */
+  .proj-grid-unified{grid-template-columns:1fr}
+  .mini-stats{grid-template-columns:1fr 1fr}
   footer{flex-direction:column;text-align:center}
   .hero-inner{padding:0 1.5rem}
-  .proj-card.proj-game .proj-img-stack{grid-template-columns:1fr}
-  .proj-card.proj-game .proj-img-stack img:not(:first-child){display:none}
+  /* Game card image stack single column on mobile */
+  .proj-img-stack{grid-template-columns:1fr}
+  .proj-img-stack img:not(:first-child){display:none}
+  /* exp row on mobile */
+  .exp-row{grid-template-columns:48px 1fr}
+  .exp-num{font-size:1.5rem}
+  .exp-content{padding:1.2rem}
+}
+
+/* Tablet: 2 columns for projects */
+@media (min-width:701px) and (max-width:1100px){
+  .proj-grid-unified{grid-template-columns:repeat(2,1fr)}
 }
 </style>
 </head>
@@ -338,6 +369,27 @@ footer p{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:
         <span class="blink-dot"></span>
         Portfolio 2026 — Dhaka, Bangladesh
       </div>
+
+      <!-- MOBILE AVATAR (shown only on small screens) -->
+      <div class="hero-avatar-mobile">
+        <div class="avatar-frame">
+          <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/yeasir_arafat_emon.jpg" alt="Yeasir Arafat Emon">
+          <div class="avatar-scan"></div>
+          <div class="gc-tr"></div>
+          <div class="gc-bl"></div>
+          <div class="avatar-id-tag">
+            <div class="ait-name"><strong>Yeasir Arafat Emon</strong>Android Developer</div>
+            <div class="ait-status"><span class="ds"></span>AVAILABLE</div>
+          </div>
+        </div>
+      </div>
+      <!-- MOBILE STATS STRIP -->
+      <div class="hero-stats-mobile">
+        <div class="hstat-m"><div class="sv">2+</div><div class="sl">Years</div></div>
+        <div class="hstat-m"><div class="sv">50+</div><div class="sl">Apps</div></div>
+        <div class="hstat-m"><div class="sv">84%</div><div class="sl">Java</div></div>
+      </div>
+
       <h1 class="hero-name">
         <span class="n1">YEASIR</span>
         <span class="n2">ARAFAT</span>
@@ -347,13 +399,15 @@ footer p{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:
         <span class="gt">$ </span><span id="typed"></span><span class="caret"></span>
       </div>
       <p class="hero-desc">
-        <strong>Android developer</strong> & tech enthusiast crafting clean, efficient mobile apps. Passionate about <strong>Java, cybersecurity</strong>, and building things that just work.
+        <strong>Android developer</strong> &amp; tech enthusiast crafting clean, efficient mobile apps. Passionate about <strong>Java, cybersecurity</strong>, and building things that just work.
       </p>
       <div class="hero-btns">
         <a href="#projects" class="btn-red">View Work</a>
         <a href="#contact" class="btn-outline-r">Get in Touch</a>
       </div>
     </div>
+
+    <!-- DESKTOP AVATAR (hidden on mobile) -->
     <div class="hero-avatar-panel">
       <div class="avatar-frame">
         <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/yeasir_arafat_emon.jpg" alt="Yeasir Arafat Emon">
@@ -372,6 +426,7 @@ footer p{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:
       </div>
     </div>
   </div>
+
   <div class="scroll-down">
     <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
       <div class="sa"></div><div class="sa"></div><div class="sa"></div>
@@ -427,7 +482,7 @@ footer p{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:
     <div class="skills-grid" id="skgrid">
       <div class="sk-cell rv"><div class="sk-top"><div class="sk-ico">☕</div><div class="sk-pct">84%</div></div><div class="sk-name">Java</div><div class="sk-track"><div class="sk-fill" data-w="84"></div></div></div>
       <div class="sk-cell rv"><div class="sk-top"><div class="sk-ico">📱</div><div class="sk-pct">60%</div></div><div class="sk-name">Android Development</div><div class="sk-track"><div class="sk-fill" data-w="60"></div></div></div>
-      <div class="sk-cell rv"><div class="sk-top"><div class="sk-ico">🗄️</div><div class="sk-pct">70%</div></div><div class="sk-name">SQLite & APIs</div><div class="sk-track"><div class="sk-fill" data-w="70"></div></div></div>
+      <div class="sk-cell rv"><div class="sk-top"><div class="sk-ico">🗄️</div><div class="sk-pct">70%</div></div><div class="sk-name">SQLite &amp; APIs</div><div class="sk-track"><div class="sk-fill" data-w="70"></div></div></div>
       <div class="sk-cell rv"><div class="sk-top"><div class="sk-ico">🎨</div><div class="sk-pct">75%</div></div><div class="sk-name">UI / UX Design</div><div class="sk-track"><div class="sk-fill" data-w="75"></div></div></div>
       <div class="sk-cell rv"><div class="sk-top"><div class="sk-ico">🐍</div><div class="sk-pct">50%</div></div><div class="sk-name">Python</div><div class="sk-track"><div class="sk-fill" data-w="50"></div></div></div>
       <div class="sk-cell rv"><div class="sk-top"><div class="sk-ico">🌐</div><div class="sk-pct">50%</div></div><div class="sk-name">HTML / CSS</div><div class="sk-track"><div class="sk-fill" data-w="50"></div></div></div>
@@ -471,7 +526,7 @@ footer p{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:
         <div class="exp-num">03</div>
         <div class="exp-content">
           <div class="exp-meta">
-            <div><div class="exp-title">Cybersecurity Research</div><div class="exp-co">Personal Lab & Self-Study</div></div>
+            <div><div class="exp-title">Cybersecurity Research</div><div class="exp-co">Personal Lab &amp; Self-Study</div></div>
             <div class="exp-date">Ongoing</div>
           </div>
           <div class="exp-desc">Hands-on practice with Kali Linux for network security, vulnerability assessment, and penetration testing. Building foundational knowledge in ethical hacking and security-first development.</div>
@@ -510,7 +565,7 @@ footer p{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:
   </div></div>
 </section>
 
-<!-- PROJECTS -->
+<!-- PROJECTS — unified 2×2 grid, all 4 visible -->
 <div class="divider"><div class="div-diamond"></div></div>
 <section class="sec" id="projects">
   <div class="wrap"><div class="sec-inner">
@@ -519,8 +574,9 @@ footer p{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:
       <h2 class="sec-title">WHAT I'VE <span class="red">BUILT</span></h2>
     </div>
 
-    <!-- Top 3 projects -->
-    <div class="proj-grid" style="margin-bottom:1px;">
+    <div class="proj-grid-unified">
+
+      <!-- Project 1 -->
       <div class="proj-card rv">
         <div class="proj-img">
           <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/ss1.jpeg" alt="News Aggregator">
@@ -530,9 +586,14 @@ footer p{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:
         <div class="proj-body">
           <div class="proj-title">News Aggregator App</div>
           <div class="proj-desc">Aggregates Bangladeshi TV channels and online news portals into one fast, seamless experience with smart filtering.</div>
-          <div class="proj-footer"><div class="proj-stack">Java · Android · API</div><a href="project1.html" class="proj-link">Details</a></div>
+          <div class="proj-footer">
+            <div class="proj-stack">Java · Android · API</div>
+            <a href="project1.html" class="proj-link">Details</a>
+          </div>
         </div>
       </div>
+
+      <!-- Project 2 -->
       <div class="proj-card rv">
         <div class="proj-img">
           <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/sss1.jpeg" alt="VOCAP">
@@ -542,9 +603,14 @@ footer p{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:
         <div class="proj-body">
           <div class="proj-title">VOCAP — Vocabulary Companion</div>
           <div class="proj-desc">Vocabulary learning app with spaced repetition, smart review scheduling, and progress tracking to master English.</div>
-          <div class="proj-footer"><div class="proj-stack">Java · SQLite · UX</div><a href="project2.html" class="proj-link">Details</a></div>
+          <div class="proj-footer">
+            <div class="proj-stack">Java · SQLite · UX</div>
+            <a href="project2.html" class="proj-link">Details</a>
+          </div>
         </div>
       </div>
+
+      <!-- Project 3 -->
       <div class="proj-card rv">
         <div class="proj-img">
           <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/bss1.jpeg" alt="BudgetBuddy">
@@ -554,17 +620,17 @@ footer p{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:
         <div class="proj-body">
           <div class="proj-title">BudgetBuddy</div>
           <div class="proj-desc">Smart income and expense manager with visual charts, daily tracking, and intelligent spending insights.</div>
-          <div class="proj-footer"><div class="proj-stack">Java · Charts · SQLite</div><a href="project3.html" class="proj-link">Details</a></div>
+          <div class="proj-footer">
+            <div class="proj-stack">Java · Charts · SQLite</div>
+            <a href="project3.html" class="proj-link">Details</a>
+          </div>
         </div>
       </div>
-    </div>zz
 
-    <!-- Project 4: Wrong Drive — full-width featured card -->
-    <div style="border:1px solid var(--border-d);border-top:none;">
-      <div class="proj-card proj-game rv" style="flex-direction:row;min-height:240px;">
-        <!-- Screenshot stack -->
-        <div class="proj-img" style="width:420px;flex-shrink:0;height:auto;min-height:240px;">
-          <div class="proj-img-stack" style="height:100%;">
+      <!-- Project 4 — Wrong Drive (game, gold accent) -->
+      <div class="proj-card proj-game rv">
+        <div class="proj-img">
+          <div class="proj-img-stack">
             <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/SS1.jpeg" alt="Home Screen">
             <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/real%20ss%20%201.jpeg" alt="Gameplay">
             <img src="https://raw.githubusercontent.com/yeasirarafatemon333/emondev.github.io/refs/heads/main/gss.jpeg" alt="Shield Active">
@@ -572,23 +638,21 @@ footer p{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:
           <div class="proj-img-over"></div>
           <div class="proj-num-tag">04 / ANDROID GAME</div>
         </div>
-        <!-- Info -->
-        <div class="proj-body" style="padding:2rem 2.5rem;justify-content:center;">
+        <div class="proj-body">
           <div class="game-live-badge">Live on Play Store</div>
-          <div class="proj-title" style="font-size:1.7rem;margin-bottom:0.5rem;">Wrong Drive</div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;opacity:0.7;">Endless Racing Car Game</div>
-          <div class="proj-desc" style="max-width:520px;">Race at full speed on the wrong side of the road, dodging oncoming traffic in this fast-paced endless racer. Features turbo jumps, shield power-ups, a coin economy, rewarded ads via AdMob, and progressive difficulty — built from scratch using Java and Android Canvas with no game engine.</div>
-          <div class="proj-footer" style="margin-top:auto;">
-            <div class="proj-stack">Java · Android Canvas · AdMob · SharedPrefs</div>
-            <div style="display:flex;gap:1rem;align-items:center;">
+          <div class="proj-title">Wrong Drive</div>
+          <div class="proj-desc">Race at full speed on the wrong side of the road, dodging oncoming traffic. Features turbo jumps, shield power-ups, coin economy, rewarded ads via AdMob, and progressive difficulty — built from scratch using Java and Android Canvas.</div>
+          <div class="proj-footer">
+            <div class="proj-stack">Java · Canvas · AdMob</div>
+            <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;">
               <a href="project4.html" class="proj-link" style="color:var(--gold);">Details</a>
               <a href="https://play.google.com/store/apps/details?id=com.artechandsoft.cargame" target="_blank" class="proj-link" style="color:var(--red);">Play Store</a>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
+    </div><!-- end proj-grid-unified -->
   </div></div>
 </section>
 
@@ -629,11 +693,12 @@ footer p{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:
 <footer>
   <div class="f-logo">EMON.DEV</div>
   <div class="f-line"></div>
-  <p>© 2026 Yeasir Arafat Emon — Built with ❤️ & Java</p>
+  <p>© 2026 Yeasir Arafat Emon — Built with ❤️ &amp; Java</p>
   <p style="opacity:0.4">Dhaka, Bangladesh</p>
 </footer>
 
 <script>
+// Custom cursor (desktop only)
 const dot=document.getElementById('c-dot'),cross=document.getElementById('c-cross');
 let mx=0,my=0,cx=0,cy=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
@@ -643,6 +708,7 @@ document.querySelectorAll('a,button,.proj-card,.sk-cell,.mstat,.exp-row,.crow').
   el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
 });
 
+// Typewriter
 const roles=['Android Developer','Java Programmer','Mobile App Creator','Tech Enthusiast','Security Learner','Game Developer'];
 let ri=0,ci=0,del=false;
 function typeIt(){
@@ -654,11 +720,13 @@ function typeIt(){
 }
 typeIt();
 
+// Reveal on scroll
 const ro=new IntersectionObserver(entries=>{
   entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('in'),i*80);});
 },{threshold:0.08});
 document.querySelectorAll('.rv').forEach(el=>ro.observe(el));
 
+// Skill bars
 const so=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
     if(e.isIntersecting){e.target.querySelectorAll('.sk-fill').forEach(b=>b.style.width=b.dataset.w+'%');so.unobserve(e.target);}
@@ -666,6 +734,7 @@ const so=new IntersectionObserver(entries=>{
 },{threshold:0.15});
 document.querySelectorAll('#skgrid').forEach(g=>so.observe(g));
 
+// Active nav highlight
 const secs=document.querySelectorAll('section[id]'),nls=document.querySelectorAll('.nav-links a');
 window.addEventListener('scroll',()=>{
   let cur='';
